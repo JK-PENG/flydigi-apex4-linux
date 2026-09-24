@@ -1,0 +1,222 @@
+#!/usr/bin/env bash
+# SPDX-License-Identifier: MIT
+#
+# 临时开关：立刻启动或停止中继，不动开机自启的设置。重启后回到自启所决定的状态。
+#
+#   ./apex4-relay start                临时开启
+#   ./apex4-relay stop                 临时关闭
+#   ./apex4-relay restart              临时重启
+#   ./apex4-relay status               只看状态，不改动
+#   ./apex4-relay start -- --trigger-dry-run --trigger-debug
+#                                      带一次性参数临时开启（例如只打印不写扳机）
+#   ./apex4-relay                      交互菜单（桌面快捷方式用）
+#
+# 已安装（./install.sh 跑过）时用服务 flydigi-apex4.service，配置取自
+# ~/.config/flydigi-apex4/config.json；没安装或带了附加参数时，用 systemd 的
+# 瞬态单元 apex4-relay-manual.service 直接跑项目里的 apex4-ds5。
+# 两个单元互斥：谁先起谁独占手柄，不会出现两个进程抢同一个设备。
+set -euo pipefail
+
+UNIT="flydigi-apex4.service"
+MANUAL_UNIT="apex4-relay-manual.service"
+UNIT_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/systemd/user"
+PREFIX="${XDG_DATA_HOME:-$HOME/.local/share}/flydigi-apex4"
+SELF_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+say()  { printf '%s\n' "$*"; }
+warn() { printf '%s\n' "$*" >&2; }
+die()  { printf '%s\n' "$*" >&2; exit 1; }
+
+need_user_manager() {
+  systemctl --user show-environment >/dev/null 2>&1 \
+    || die "没有可用的用户级 systemd。请在图形会话的终端里运行（桌面模式或大屏模式）。"
+}
+
+unit_active() { systemctl --user is-active --quiet "$1" 2>/dev/null; }
+
+relay_unit() {
+  if unit_active "$MANUAL_UNIT"; then printf '%s\n' "$MANUAL_UNIT"
+  elif unit_active "$UNIT"; then printf '%s\n' "$UNIT"
+  fi
+}
+
+relay_running() { [ -n "$(relay_unit)" ]; }
+
+virtual_present() {
+  local uevent
+  for uevent in /sys/class/hidraw/hidraw*/device/uevent; do
+    [ -r "$uevent" ] || continue
+    if grep -q -e "HID_ID=0003:0000054C:00000DF2" -e "HID_ID=0003:0000054C:00000CE6" "$uevent"; then
+      return 0
+    fi
+  done
+  return 1
+}
+
+relay_binary() {
+  if [ -x "$PREFIX/apex4-ds5" ]; then
+    printf '%s\n' "$PREFIX/apex4-ds5"
+  elif [ -x "$SELF_DIR/apex4-ds5" ]; then
+    printf '%s\n' "$SELF_DIR/apex4-ds5"
+  else
+    die "找不到 apex4-ds5。请先运行 ./install.sh，或在项目目录里运行本脚本。"
+  fi
+}
+
+python_bin() {
+  if [ -x /usr/bin/python3 ]; then printf '%s\n' /usr/bin/python3; else command -v python3; fi
+}
+
+wait_stopped() {
+  local unit="$1" i
+  for i in $(seq 1 20); do
+    unit_active "$unit" || return 0
+    sleep 0.25
+  done
+  return 1
+}
+
+stop_all() {
+  local stopped=0
+  if unit_active "$MANUAL_UNIT"; then
+    systemctl --user stop "$MANUAL_UNIT" || true
+    wait_stopped "$MANUAL_UNIT" || warn "瞬态单元没有在 5 秒内退出。"
+    stopped=1
+    say "已停止临时进程（$MANUAL_UNIT）。"
+  fi
+  if unit_active "$UNIT"; then
+    systemctl --user stop "$UNIT" || true
+    wait_stopped "$UNIT" || warn "服务没有在 5 秒内退出。"
+    stopped=1
+    say "已停止中继服务（$UNIT）。"
+  fi
+  if [ "$stopped" = 0 ]; then
+    say "中继本来就没有在运行。"
+  fi
+  sleep 0.5
+  if virtual_present; then
+    warn "注意：虚拟手柄仍然存在，说明还有别的进程占用。检查：journalctl --user -u $UNIT -n 30"
+  fi
+}
+
+start_manual() {
+  local binary py
+  binary="$(relay_binary)"
+  py="$(python_bin)"
+  systemd-run --user --collect --unit="$MANUAL_UNIT" \
+    --property="WorkingDirectory=$(dirname "$binary")" \
+    --setenv=PYTHONUNBUFFERED=1 \
+    "$py" -u "$binary" "$@" >/dev/null
+  say "已启动临时进程（$MANUAL_UNIT）。"
+}
+
+start_relay() {
+  local extra=("$@")
+  if [ "${#extra[@]}" -gt 0 ]; then
+    # 带附加参数时总是走瞬态单元，免得把一次性参数留在服务配置里。
+    if unit_active "$MANUAL_UNIT"; then
+      systemctl --user stop "$MANUAL_UNIT" >/dev/null 2>&1 || true
+      wait_stopped "$MANUAL_UNIT" || true
+    fi
+    if unit_active "$UNIT"; then
+      systemctl --user stop "$UNIT" >/dev/null 2>&1 || true
+      wait_stopped "$UNIT" || true
+    fi
+    start_manual "${extra[@]}"
+  elif [ -f "$UNIT_DIR/$UNIT" ]; then
+    if unit_active "$MANUAL_UNIT"; then
+      systemctl --user stop "$MANUAL_UNIT" >/dev/null 2>&1 || true
+      wait_stopped "$MANUAL_UNIT" || true
+    fi
+    if unit_active "$UNIT"; then
+      say "中继已经在运行（$UNIT）。"
+    else
+      systemctl --user start "$UNIT"
+      say "已启动中继服务（$UNIT）。"
+    fi
+  else
+    start_manual
+  fi
+  sleep 1
+  local unit; unit="$(relay_unit)"
+  [ -n "$unit" ] || die "启动失败：没有活跃单元。请看 journalctl --user -u $UNIT -n 30"
+  journalctl --user -u "$unit" -n 8 --no-pager 2>/dev/null | sed 's/^/    /' || true
+  say
+  show_status
+}
+
+show_status() {
+  local unit device
+  unit="$(relay_unit)"
+  if [ -n "$unit" ]; then
+    say "中继进程 : 运行中（$unit）"
+  else
+    say "中继进程 : 已停止"
+  fi
+  if virtual_present; then device="已出现"; else device="未出现"; fi
+  say "虚拟手柄 : $device"
+  if systemctl --user is-enabled --quiet "$UNIT" 2>/dev/null; then
+    say "开机自启 : 已开启（重启后会自动运行）"
+  else
+    say "开机自启 : 已关闭（重启后不会自动运行）"
+  fi
+}
+
+menu() {
+  local choice
+  while true; do
+    cat <<'EOF'
+
+Flydigi APEX 4 —— 临时开关
+
+  1) 临时开启
+  2) 临时关闭
+  3) 重启中继
+  4) 查看状态
+  q) 退出
+EOF
+    read -r -p "请选择 [1/2/3/4/q]: " choice || choice=q
+    case "$choice" in
+      1) start_relay ;;
+      2) stop_all ;;
+      3) stop_all; start_relay ;;
+      4) show_status ;;
+      q|Q|"") break ;;
+      *) say "输入无效，请选 1、2、3、4 或 q。" ;;
+    esac
+    [ -t 0 ] || break
+  done
+  printf '\n按回车键关闭窗口 … '
+  read -r _ || true
+}
+
+usage() {
+  sed -n '4,14p' "$0" | sed 's/^# \{0,1\}//'
+}
+
+if [ "${1:-}" = "-h" ] || [ "${1:-}" = "--help" ] || [ "${1:-}" = "help" ]; then
+  usage
+  exit 0
+fi
+
+case "${1:-}" in
+  start|stop|restart|toggle|status|"") ;;
+  *) warn "未知参数：$1"; usage >&2; exit 2 ;;
+esac
+
+need_user_manager
+
+if [ "${1:-}" = "start" ]; then
+  shift
+  if [ "${1:-}" = "--" ]; then shift; fi
+  start_relay "$@"
+  exit 0
+fi
+
+case "${1:-}" in
+  stop)                  stop_all; show_status ;;
+  restart)               shift; if [ "${1:-}" = "--" ]; then shift; fi; stop_all; start_relay "$@" ;;
+  toggle)                if relay_running; then stop_all; else start_relay; fi; show_status ;;
+  status|"")             if [ "$#" -eq 0 ] && [ -t 1 ] && [ -t 0 ]; then menu; else show_status; fi ;;
+  *) warn "未知参数：$1"; usage >&2; exit 2 ;;
+esac

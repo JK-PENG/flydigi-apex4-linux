@@ -1,0 +1,86 @@
+# OW2 native-game validation, sanitized excerpt
+
+Date: 2026-09-20
+Game: Overwatch 2, practice range, Hanzo full bow charge
+Runtime: Proton Experimental `experimental-11.0-20260910b-x86_64`, Steam Linux Runtime 4
+Physical transport: APEX 4 DeviceType 84, firmware 6837, 2.4 GHz dongle
+Steam Input: ForceOff (`UseSteamControllerConfig=0`)
+Game wrapper: physical `04b4:2412` excluded from SDL and Proton hidraw; effective
+variables were verified in the OW2 `winedevice.exe` processes.
+
+This file preserves only the lines needed for the claims below. It contains no
+credentials, addresses, controller MAC, device paths tied to user storage, or
+Steam account id.
+
+## Identity comparison
+
+The first Edge attempt of the day is invalid: Steam restart had started the
+installed Edge service while the diagnostic Edge relay was already running.
+The game opened the other relay, so zero reports in the diagnostic relay could
+not be attributed to Edge compatibility.
+
+The comparison was repeated after stopping both services and proving exactly
+one relay process, one `/dev/uhid` holder and one Sony virtual node per run.
+
+Plain DualSense `054c:0ce6`, three full charges:
+
+```text
+22:27:58 DS5 R2: vibration type=0x26 start=0 end=9 strength=32 frequency=21
+22:27:58 DRY-RUN APEX4 R2: mode=2 params=(0, 1, 120, 21, 0)
+22:27:59 DS5 R2: resistance type=0x21 start=0 end=9 strength=96
+22:27:59 DRY-RUN APEX4 R2: mode=1 params=(1, 64, 0, 0, 0)
+22:28:03 DS5 R2: normal type=0x05
+22:28:03 DRY-RUN APEX4 R2: mode=0 params=(0, 0, 0, 0, 0)
+```
+
+The same sequence was observed for the second and third charge. The bounded
+action window contained 9589 host output reports; the raw trigger type counts
+were R2 `0x26`: 569, R2 `0x21`: 129, R2 Off `0x05`: 4096 and L2 Off `0x05`:
+4794. Repetition reflects the game's high-rate output; state deduplication logs
+and translates only effect changes.
+
+DualSense Edge `054c:0df2`, same holder action and clean single-relay setup:
+
+```text
+action-window UHID outputs: 0
+action-window decoded trigger effects: 0
+```
+
+Wine held the correct virtual hidraw node in both runs. Therefore this OW2 /
+Proton combination emits native trigger effects for ordinary DualSense but not
+for Edge. This is a game/runtime compatibility finding, not a universal Edge
+protocol claim.
+
+## Constrained physical closure
+
+The prior authorization allowed only one side, mild resistance, about one
+second and automatic reset. `--trigger-one-shot-mild-right` was introduced for
+that exact boundary. It requires ordinary DualSense, a verified APEX 4 identity,
+maps only the first R2 non-Normal effect to fixed resistance `(60,40)`, ignores
+L2 and later effects, clears after at most one second, then latches Normal.
+
+The second run produced both machine and holder evidence:
+
+```text
+22:51:26 DS5 R2: vibration type=0x26 ...
+22:51:26 APEX4 R2: mode=1 params=(60, 40, 0, 0, 0)
+22:51:27 APEX4 L2: mode=0 ... reason=one-shot mild safety timeout
+22:51:27 APEX4 R2: mode=0 ... reason=one-shot mild safety timeout
+```
+
+Counts: one R2 mild write, one timeout reset, zero write failures. The holder
+confirmed feeling the R2 resistance. At game exit the relay again wrote both
+sides Normal; after relay stop there were zero `/dev/uhid` holders. The normal
+installed Edge service was then restored.
+
+This is a constrained native-game physical PASS for the full game-to-pad path.
+It is not hardware acceptance of OW2's original rattle and resistance parameters.
+Those effects remain dry-run verified only.
+
+## Concurrent-relay defect and guard
+
+The invalid first Edge sample exposed that script-level service switching was
+not enough: Steam restart could start the installed service after a manual relay
+was already active. A process-level `flock` guard now prevents a second relay
+from opening the pad or creating another virtual device. The lock records its
+PID with mode `0600`; tests cover refusal and release/reacquire.

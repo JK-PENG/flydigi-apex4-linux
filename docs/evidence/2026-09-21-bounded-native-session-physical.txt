@@ -1,0 +1,67 @@
+# Three-cycle bounded native OW2 physical acceptance, sanitized excerpt
+
+Date: 2026-09-21
+Scope: one explicitly authorized three-cycle R2 block over the 2.4 GHz
+connection. Each cycle allowed semantic mode 2 strength <=32, capped mode 1
+strength <=40, game Off clearing, a four-second deadline, and no more than
+three cycles in a 30-second session.
+
+## Preflight and launch
+
+Preflight found no OW2 process, daily Edge active, manual relay inactive, one
+safe `translation-dry-run` option, no session-write option and
+`adaptive_triggers=false`. Steam was stopped before an exact, backed-up option
+change to `native-session-write`. The first launch request did not start OW2 or
+a lasting manual relay and consumed no cycle; the announced fallback request
+started the game. Before the holder action the verified transport had only
+received connection-time bilateral Normal and the non-Normal count was zero.
+
+## Three game-cleared cycles
+
+```text
+cycle 1  22:54:11.050 mode 2
+         22:54:11.770 mode 1     (+0.720 s)
+         22:54:12.354 game Off -> R2 Normal  (1.304 s total)
+
+cycle 2  22:54:18.400 mode 2
+         22:54:19.120 mode 1     (+0.720 s)
+         22:54:19.786 game Off -> R2 Normal  (1.386 s total)
+
+cycle 3  22:54:22.282 mode 2
+         22:54:23.004 mode 1     (+0.722 s)
+         22:54:24.120 game Off -> R2 Normal  (1.838 s total)
+```
+
+All three cycles completed within about 13.1 seconds from the first mode 2 to
+the final Normal. Every Off arrived before the four-second safety deadline, so
+there was no timeout-clear substitute in this acceptance sample. There was no
+fourth effect, wrong-side write, safety-timeout line or ForceAdapt write
+failure. The three-cycle budget then latched the policy complete.
+
+## Holder evidence
+
+The holder confirmed that all three cycles produced both perceivable vibration
+and resistance, and that R2 returned to normal after every release. This is the
+first repeated native-game sample with both game-driven mode changes and
+game-driven Off clears accepted by machine and holder. Ordinary release rumble
+remains a separate game effect and does not change this trigger result.
+
+## Exit and safe restoration
+
+After normal exit: OW2=0, wrapper=0, daily service active, manual service
+inactive, one Edge, zero ordinary DualSense and one relay. Steam was stopped
+under a temporary runtime mask and the exact option was backed up and returned
+to `translation-dry-run`; after restart there was one safe option, zero
+`native-session-write` options and `adaptive_triggers=false`.
+
+## Acceptance boundary
+
+Delivery-plan stage D is complete for the scoped OW2/2.4 GHz/R2 bounded
+semantic profile: repeated game-triggered mode 2 to mode 1 changes, active
+game-Off clears, holder-perceived effects, normal travel after release, cycle
+budget, exit restoration and default-off configuration all pass.
+
+This does not establish L2 output in OW2, cable repetition, unrestricted
+strength, other games/controllers, or long-term reliability. Those remain
+targeted E-stage regressions or explicit non-goals; one successful three-cycle
+block is not generalized beyond its stated scope.

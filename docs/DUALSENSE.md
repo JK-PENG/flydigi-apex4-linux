@@ -83,6 +83,13 @@ trick. `hid-playstation` sets its internal `is_edge` purely from the product id
 and asks for nothing else, and the descriptor served can stay the plain DualSense
 one.
 
+The installed default identity remains Edge. If a game does not emit trigger
+output to Edge, the `--relay-profile dualsense` game wrapper provides a
+game-scoped, identity-only fallback. The temporary relay
+inherits the installed trigger profile; after a verified game exit it restores
+one Edge. The currently accepted OW2 launch option still names `ow2-safe-write`
+until the generic-safe profile passes its separate physical/game gates.
+
 **Check the right consumer.** On the machine this was built on, the kernel bound
 the device as `054C:0DF2` but did *not* register `BTN_TRIGGER_HAPPY1..4` on its
 evdev node — and Steam showed the Edge with all four buttons working anyway,
@@ -118,11 +125,26 @@ one physical button, so "left click" and "right click" are the same button with 
 contact on one side or the other — which is how this repository turns two back
 paddles into two clicks.
 
-## Output reports: rumble, and how to stop it
+## Output reports: rumble and adaptive triggers
 
 Report `0x02` over USB (`0x31` over Bluetooth). Motor levels sit at `base+2` and
 `base+3`, valid when flag0 has `MOTOR` or `USE_RUMBLE_NOT_HAPTICS`, or flag2 has
 `COMPATIBLE_VIBRATION`.
+
+The same common body carries two 11-byte adaptive-trigger blocks. Flag0 `0x04`
+makes the right block valid and `0x08` the left; each block is one effect type
+plus ten parameters. In USB indexing the right type is byte 11 and left type
+byte 22. `ds5.parse_output()` extracts these side-specific raw blocks from both
+`UHID_OUTPUT` (the old `UHID_OUTPUT_EV` name for event 6) and control-path
+`UHID_SET_REPORT` payloads. The semantic parser and APEX 4 translation are
+separate modules; see [DSX.md](DSX.md).
+
+Trigger output is stateful, like rumble, but has its own cleanup. The relay sends
+APEX 4 Normal on an explicit DualSense Off, UHID `CLOSE`/`STOP`, verified vendor
+reconnect, disconnect/write failure and process exit. It does not refresh a held
+effect every input frame. Identical translated effects are deduplicated.
+
+### Rumble, and how to stop it
 
 Three things, all learned by getting them wrong:
 

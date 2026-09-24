@@ -1,0 +1,74 @@
+# Bounded native OW2 candidate, sanitized excerpt
+
+Date: 2026-09-21
+Scope: local and SteamOS software validation, captured-report replay and
+recoverable deployment. No OW2 launch and no physical ForceAdapt effect.
+
+## Candidate contract
+
+`--trigger-bounded-native-right` selects the semantic translator and permits
+one R2 cycle only. It preserves the captured mode change while applying fixed
+caps:
+
+```text
+mode 2 rattle:     start<=60 pressure<=1 strength<=32 frequency<=21
+mode 1 resistance: start<=60 strength<=40
+total active deadline: <=1.0 second from the first accepted effect
+```
+
+The `0x26 -> 0x21` transition does not restart or extend the deadline. Game Off
+clears early and latches the gate complete. L2, other modes and every later
+cycle are ignored. Disconnect/disable abort the gate and normal relay reset
+rules still apply. The effect is not accepted before the same-fd identity gate
+has attached a verified APEX 4 transport.
+
+For the captured Hanzo reports, the final candidate is:
+
+```text
+0x26 -> mode 2 (0,1,32,21,0)
+0x21 -> mode 1 (0,40,0,0,0)
+timeout or 0x05 -> Normal
+```
+
+This preserves rattle versus resistance and their game-driven timing, but caps
+the decoded resistance strength 96 to the previously mild-tested strength 40.
+It is therefore a bounded semantic approximation, not an unrestricted native
+profile.
+
+## Fixed wrapper modes
+
+The game wrapper allowlists two explicit modes:
+
+- `native-dry-run`: same policy plus `--trigger-dry-run`; cannot write;
+- `native-write`: the physical policy described above.
+
+Preview output states the side, both modes, caps, one-second total deadline and
+one-cycle budget. The existing global setting cannot silently widen either
+mode, and the bounded native CLI conflicts with unrestricted adaptive or other
+bounded policies.
+
+## Verification and deployment
+
+Local: 117/117 tests PASS, Python compilation, shell syntax and diff checks
+PASS.
+
+SteamOS: 117 tests ran, 116 PASS and the existing portable C test skipped
+because no compiler was installed. A harmless profile session passed. Replaying
+the captured full HID reports through the real virtual DualSense under
+`native-dry-run` logged the expected mode 2, capped mode 1 and automatic
+bilateral Normal; no write failure occurred and dry-run prevented ForceAdapt
+output.
+
+Runtime `f3a1f57` was installed with the prior runtime retained as a recoverable
+backup. Final state was daily service active, manual service inactive, one
+Edge, zero ordinary DualSense, one relay and no OW2 process. The persisted OW2
+option remains `translation-dry-run`, `native-write` is absent, and
+`adaptive_triggers=false`.
+
+## Next authorization boundary
+
+No holder acceptance is implied. The next physical block must be announced as:
+R2 only; mode 2 at `(0,1,32,21,0)` followed by mode 1 at `(0,40,0,0,0)` if the
+game changes effect in time; at most one accepted cycle; at most one second of
+total active output; game Off or timeout sends Normal; exit also restores the
+Edge profile. Unexpected strength, wrong side or unknown reset stops the block.

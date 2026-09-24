@@ -1,0 +1,118 @@
+Sep 11 22:08:18 Machine python3[27271]: DRY-RUN APEX4 L2: mode=0 params=(0, 0, 0, 0, 0) packet=05 a0 01 01 01 00 00 00 00 00 00 00 00 00 00
+Sep 11 22:08:18 Machine python3[27271]: DRY-RUN APEX4 R2: mode=0 params=(0, 0, 0, 0, 0) packet=05 a0 01 01 02 00 00 00 00 00 00 00 00 00 00
+Sep 11 22:08:18 Machine systemd[1711]: Stopping [systemd-run] /usr/bin/python3 -u /home/deck/.local/share/flydigi-apex4/apex4-ds5 --trigger-dry-run --trigger-debug...
+Sep 11 22:08:18 Machine systemd[1711]: Stopped [systemd-run] /usr/bin/python3 -u /home/deck/.local/share/flydigi-apex4/apex4-ds5 --trigger-dry-run --trigger-debug.
+Sep 11 22:08:18 Machine systemd[1711]: apex4-relay-manual.service: Consumed 4.850s CPU time, 10.8M memory peak.
+Sep 11 22:08:19 Machine systemd[1711]: Started [systemd-run] /usr/bin/python3 -u /home/deck/.local/share/flydigi-apex4/apex4-ds5 --trigger-dry-run --trigger-debug.
+Sep 11 22:08:19 Machine python3[27818]: vendor stream : /dev/hidraw11
+Sep 11 22:08:19 Machine python3[27818]: gamepad node  : /dev/input/event25 (Flydigi Flydigi VADER3)
+Sep 11 22:08:19 Machine python3[27818]: axis ranges   : 0..255, 0..255, 0..255, 0..255, 0..255, 0..255
+Sep 11 22:08:19 Machine python3[27818]: Apex 4 (DualSense Edge) created; waiting for the kernel to bind it
+Sep 11 22:14:57 Machine python3[27818]: DS5 R2: normal type=0x05
+Sep 11 22:14:57 Machine python3[27818]: DRY-RUN APEX4 R2: mode=0 params=(0, 0, 0, 0, 0) packet=05 a0 01 01 02 00 00 00 00 00 00 00 00 00 00
+Sep 11 22:14:57 Machine python3[27818]: DS5 L2: normal type=0x05
+Sep 11 22:14:57 Machine python3[27818]: DRY-RUN APEX4 L2: mode=0 params=(0, 0, 0, 0, 0) packet=05 a0 01 01 01 00 00 00 00 00 00 00 00 00 00
+Sep 11 22:20:22 Machine systemd[1711]: Stopping [systemd-run] /usr/bin/python3 -u /home/deck/.local/share/flydigi-apex4/apex4-ds5 --trigger-dry-run --trigger-debug...
+Sep 11 22:20:22 Machine python3[27818]: DRY-RUN APEX4 L2: mode=0 params=(0, 0, 0, 0, 0) packet=05 a0 01 01 01 00 00 00 00 00 00 00 00 00 00
+Sep 11 22:20:22 Machine python3[27818]: DRY-RUN APEX4 R2: mode=0 params=(0, 0, 0, 0, 0) packet=05 a0 01 01 02 00 00 00 00 00 00 00 00 00 00
+Sep 11 22:20:22 Machine systemd[1711]: Stopped [systemd-run] /usr/bin/python3 -u /home/deck/.local/share/flydigi-apex4/apex4-ds5 --trigger-dry-run --trigger-debug.
+Sep 11 22:20:22 Machine systemd[1711]: apex4-relay-manual.service: Consumed 12.860s CPU time, 12.2M memory peak, 7.2M memory swap peak.
+Sep 11 22:20:23 Machine systemd[1711]: Started [systemd-run] /usr/bin/python3 -u /home/deck/.local/share/flydigi-apex4/apex4-ds5 --trigger-dry-run --trigger-debug --verbose.
+Sep 11 22:20:23 Machine python3[29336]: settings      : /home/deck/.config/flydigi-apex4/config.json
+Sep 11 22:20:23 Machine python3[29336]: vendor stream : /dev/hidraw11
+Sep 11 22:20:23 Machine python3[29336]: gamepad node  : /dev/input/event25 (Flydigi Flydigi VADER3)
+Sep 11 22:20:23 Machine python3[29336]: axis ranges   : 0..255, 0..255, 0..255, 0..255, 0..255, 0..255
+Sep 11 22:20:23 Machine python3[29336]: Apex 4 (DualSense Edge) created; waiting for the kernel to bind it
+Sep 11 22:20:23 Machine python3[29336]: output report: 02 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+Sep 11 22:20:23 Machine python3[29336]: output report: 02 00 14 00 00 00 00 00 00 00 00 00 00 00 00 00
+Sep 11 22:20:23 Machine python3[29336]: output report: 02 a0 80 00 00 00 64 00 30 00 00 00 00 00 00 00
+Sep 11 22:20:23 Machine python3[29336]: output report: 02 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+Sep 11 22:20:23 Machine python3[29336]: output report: 02 00 14 00 00 00 00 00 00 00 00 00 00 00 00 00
+Sep 11 22:20:23 Machine python3[29336]: output report: 02 0d 17 00 00 00 00 00 00 00 00 05 00 00 00 00
+Sep 11 22:20:23 Machine python3[29336]: DS5 R2: normal type=0x05
+Sep 11 22:20:23 Machine python3[29336]: DRY-RUN APEX4 R2: mode=0 params=(0, 0, 0, 0, 0) packet=05 a0 01 01 02 00 00 00 00 00 00 00 00 00 00
+Sep 11 22:20:23 Machine python3[29336]: DS5 L2: normal type=0x05
+Sep 11 22:20:23 Machine python3[29336]: DRY-RUN APEX4 L2: mode=0 params=(0, 0, 0, 0, 0) packet=05 a0 01 01 01 00 00 00 00 00 00 00 00 00 00
+Sep 11 22:20:23 Machine python3[29336]: trigger effects: [TriggerEffect(right, type=0x05, params=00 00 00 00 00 00 00 00 00 00), TriggerEffect(left, type=0x05, params=00 00 00 00 00 00 00 00 00 00)]
+Sep 11 22:20:24 Machine python3[29336]: output report: 02 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+Sep 11 22:20:24 Machine python3[29336]: output report: 02 00 14 00 00 00 00 00 00 00 00 00 00 00 00 00
+Sep 11 22:20:24 Machine python3[29336]: output report: 02 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+Sep 11 22:20:24 Machine python3[29336]: output report: 02 00 14 00 00 00 00 00 00 00 00 00 00 00 00 00
+Sep 11 22:20:24 Machine python3[29336]: output report: 02 00 04 00 00 00 00 00 00 00 00 00 00 00 00 00
+Sep 11 22:20:24 Machine python3[29336]: output report: 02 00 14 00 00 00 00 00 00 00 00 00 00 00 00 00
+Sep 11 22:20:24 Machine python3[29336]: output report: 02 00 14 00 00 00 00 00 00 00 00 00 00 00 00 00
+Sep 11 22:20:38 Machine python3[29336]: output report: 02 00 14 00 00 00 00 00 00 00 00 00 00 00 00 00
+Sep 11 22:20:38 Machine python3[29336]: output report: 02 00 14 00 00 00 00 00 00 00 00 00 00 00 00 00
+Sep 11 22:20:39 Machine python3[29336]: output report: 02 00 04 00 00 00 00 00 00 00 00 00 00 00 00 00
+Sep 11 22:22:51 Machine python3[29336]: output report: 02 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+Sep 11 22:22:51 Machine python3[29336]: output report: 02 00 14 00 00 00 00 00 00 00 00 00 00 00 00 00
+Sep 11 22:22:53 Machine python3[29336]: output report: 02 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+Sep 11 22:22:53 Machine python3[29336]: output report: 02 00 14 00 00 00 00 00 00 00 00 00 00 00 00 00
+Sep 11 22:22:55 Machine python3[29336]: output report: 02 00 14 00 00 00 00 00 00 00 00 00 00 00 00 00
+Sep 11 22:22:55 Machine python3[29336]: output report: 02 00 14 00 00 00 00 00 00 00 00 00 00 00 00 00
+Sep 11 22:22:55 Machine python3[29336]: output report: 02 00 04 00 00 00 00 00 00 00 00 00 00 00 00 00
+Sep 11 22:22:55 Machine python3[29336]: output report: 02 0d 17 00 00 00 00 00 00 00 00 05 00 00 00 00
+Sep 11 22:22:55 Machine python3[29336]: trigger effects: [TriggerEffect(right, type=0x05, params=00 00 00 00 00 00 00 00 00 00), TriggerEffect(left, type=0x05, params=00 00 00 00 00 00 00 00 00 00)]
+Sep 11 22:24:40 Machine python3[29336]: output report: 02 00 04 00 00 00 00 00 00 00 00 00 00 00 00 00
+Sep 11 22:27:58 Machine python3[29336]: DRY-RUN APEX4 L2: mode=0 params=(0, 0, 0, 0, 0) packet=05 a0 01 01 01 00 00 00 00 00 00 00 00 00 00
+Sep 11 22:27:58 Machine python3[29336]: DRY-RUN APEX4 R2: mode=0 params=(0, 0, 0, 0, 0) packet=05 a0 01 01 02 00 00 00 00 00 00 00 00 00 00
+Sep 11 22:27:58 Machine systemd[1711]: Stopping [systemd-run] /usr/bin/python3 -u /home/deck/.local/share/flydigi-apex4/apex4-ds5 --trigger-dry-run --trigger-debug --verbose...
+Sep 11 22:27:59 Machine systemd[1711]: Stopped [systemd-run] /usr/bin/python3 -u /home/deck/.local/share/flydigi-apex4/apex4-ds5 --trigger-dry-run --trigger-debug --verbose.
+Sep 11 22:27:59 Machine systemd[1711]: apex4-relay-manual.service: Consumed 9.763s CPU time, 14.7M memory peak.
+Sep 11 22:29:02 Machine systemd[1711]: Started [systemd-run] /usr/bin/python3 -u /home/deck/.local/share/flydigi-apex4/apex4-ds5 --trigger-dry-run --trigger-debug --verbose.
+Sep 11 22:29:02 Machine python3[31315]: settings      : /home/deck/.config/flydigi-apex4/config.json
+Sep 11 22:29:02 Machine python3[31315]: vendor stream : /dev/hidraw11
+Sep 11 22:29:02 Machine python3[31315]: gamepad node  : /dev/input/event25 (Flydigi Flydigi VADER3)
+Sep 11 22:29:02 Machine python3[31315]: axis ranges   : 0..255, 0..255, 0..255, 0..255, 0..255, 0..255
+Sep 11 22:29:02 Machine python3[31315]: Apex 4 (DualSense Edge) created; waiting for the kernel to bind it
+Sep 11 22:29:02 Machine python3[31315]: output report: 02 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+Sep 11 22:29:02 Machine python3[31315]: output report: 02 00 14 00 00 00 00 00 00 00 00 00 00 00 00 00
+Sep 11 22:29:02 Machine python3[31315]: output report: 02 a0 80 00 00 00 64 00 30 00 00 00 00 00 00 00
+Sep 11 22:29:02 Machine python3[31315]: output report: 02 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+Sep 11 22:29:02 Machine python3[31315]: output report: 02 00 14 00 00 00 00 00 00 00 00 00 00 00 00 00
+Sep 11 22:29:02 Machine python3[31315]: output report: 02 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+Sep 11 22:29:02 Machine python3[31315]: output report: 02 00 14 00 00 00 00 00 00 00 00 00 00 00 00 00
+Sep 11 22:29:02 Machine python3[31315]: output report: 02 00 04 00 00 00 00 00 00 00 00 00 00 00 00 00
+Sep 11 22:29:02 Machine python3[31315]: output report: 02 00 04 00 00 00 00 00 00 00 00 00 00 00 00 00
+Sep 11 22:29:02 Machine python3[31315]: output report: 02 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+Sep 11 22:29:02 Machine python3[31315]: output report: 02 00 14 00 00 00 00 00 00 00 00 00 00 00 00 00
+Sep 11 22:29:02 Machine python3[31315]: output report: 02 00 14 00 00 00 00 00 00 00 00 00 00 00 00 00
+Sep 11 22:29:03 Machine python3[31315]: output report: 02 0d 17 00 00 00 00 00 00 00 00 05 00 00 00 00
+Sep 11 22:29:03 Machine python3[31315]: DS5 R2: normal type=0x05
+Sep 11 22:29:03 Machine python3[31315]: DRY-RUN APEX4 R2: mode=0 params=(0, 0, 0, 0, 0) packet=05 a0 01 01 02 00 00 00 00 00 00 00 00 00 00
+Sep 11 22:29:03 Machine python3[31315]: DS5 L2: normal type=0x05
+Sep 11 22:29:03 Machine python3[31315]: DRY-RUN APEX4 L2: mode=0 params=(0, 0, 0, 0, 0) packet=05 a0 01 01 01 00 00 00 00 00 00 00 00 00 00
+Sep 11 22:29:03 Machine python3[31315]: trigger effects: [TriggerEffect(right, type=0x05, params=00 00 00 00 00 00 00 00 00 00), TriggerEffect(left, type=0x05, params=00 00 00 00 00 00 00 00 00 00)]
+Sep 11 22:37:38 Machine python3[31315]: output report: 02 00 04 00 00 00 00 00 00 00 00 00 00 00 00 00
+Sep 11 22:37:53 Machine python3[31315]: output report: 02 00 04 00 00 00 00 00 00 00 00 00 00 00 00 00
+Sep 11 22:38:11 Machine python3[31315]: output report: 02 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+Sep 11 22:38:11 Machine python3[31315]: output report: 02 00 14 00 00 00 00 00 00 00 00 00 00 00 00 00
+Sep 11 22:38:12 Machine python3[31315]: output report: 02 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+Sep 11 22:38:12 Machine python3[31315]: output report: 02 00 14 00 00 00 00 00 00 00 00 00 00 00 00 00
+Sep 11 22:38:15 Machine python3[31315]: output report: 02 00 14 00 00 00 00 00 00 00 00 00 00 00 00 00
+Sep 11 22:38:15 Machine python3[31315]: output report: 02 00 14 00 00 00 00 00 00 00 00 00 00 00 00 00
+Sep 11 22:38:15 Machine python3[31315]: output report: 02 00 04 00 00 00 00 00 00 00 00 00 00 00 00 00
+Sep 11 22:38:15 Machine python3[31315]: output report: 02 0d 17 00 00 00 00 00 00 00 00 05 00 00 00 00
+Sep 11 22:38:15 Machine python3[31315]: trigger effects: [TriggerEffect(right, type=0x05, params=00 00 00 00 00 00 00 00 00 00), TriggerEffect(left, type=0x05, params=00 00 00 00 00 00 00 00 00 00)]
+Sep 11 22:41:08 Machine python3[31315]: output report: 02 00 04 00 00 00 00 00 00 00 00 00 00 00 00 00
+Sep 11 22:41:24 Machine python3[31315]: output report: 02 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+Sep 11 22:41:24 Machine python3[31315]: output report: 02 00 14 00 00 00 00 00 00 00 00 00 00 00 00 00
+Sep 11 22:41:26 Machine python3[31315]: output report: 02 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+Sep 11 22:41:26 Machine python3[31315]: output report: 02 00 14 00 00 00 00 00 00 00 00 00 00 00 00 00
+Sep 11 22:41:28 Machine python3[31315]: output report: 02 00 14 00 00 00 00 00 00 00 00 00 00 00 00 00
+Sep 11 22:41:28 Machine python3[31315]: output report: 02 00 14 00 00 00 00 00 00 00 00 00 00 00 00 00
+Sep 11 22:41:28 Machine python3[31315]: output report: 02 00 04 00 00 00 00 00 00 00 00 00 00 00 00 00
+Sep 11 22:41:28 Machine python3[31315]: output report: 02 0d 17 00 00 00 00 00 00 00 00 05 00 00 00 00
+Sep 11 22:41:28 Machine python3[31315]: trigger effects: [TriggerEffect(right, type=0x05, params=00 00 00 00 00 00 00 00 00 00), TriggerEffect(left, type=0x05, params=00 00 00 00 00 00 00 00 00 00)]
+Sep 11 22:54:53 Machine python3[31315]: output report: 02 00 04 00 00 00 00 00 00 00 00 00 00 00 00 00
+Sep 11 22:55:03 Machine python3[31315]: output report: 02 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+Sep 11 22:55:03 Machine python3[31315]: output report: 02 00 14 00 00 00 00 00 00 00 00 00 00 00 00 00
+Sep 11 22:55:05 Machine python3[31315]: output report: 02 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+Sep 11 22:55:05 Machine python3[31315]: output report: 02 00 14 00 00 00 00 00 00 00 00 00 00 00 00 00
+Sep 11 22:55:08 Machine python3[31315]: output report: 02 00 14 00 00 00 00 00 00 00 00 00 00 00 00 00
+Sep 11 22:55:08 Machine python3[31315]: output report: 02 00 14 00 00 00 00 00 00 00 00 00 00 00 00 00
+Sep 11 22:55:08 Machine python3[31315]: output report: 02 00 04 00 00 00 00 00 00 00 00 00 00 00 00 00
+Sep 11 22:55:08 Machine python3[31315]: output report: 02 0d 17 00 00 00 00 00 00 00 00 05 00 00 00 00
+Sep 11 22:55:08 Machine python3[31315]: trigger effects: [TriggerEffect(right, type=0x05, params=00 00 00 00 00 00 00 00 00 00), TriggerEffect(left, type=0x05, params=00 00 00 00 00 00 00 00 00 00)]
+Sep 11 22:58:06 Machine python3[31315]: output report: 02 00 04 00 00 00 00 00 00 00 00 00 00 00 00 00
+Sep 11 23:00:26 Machine python3[31315]: output report: 02 00 04 00 00 00 00 00 00 00 00 00 00 00 00 00

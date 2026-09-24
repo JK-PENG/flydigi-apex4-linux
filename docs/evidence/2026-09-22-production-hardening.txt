@@ -1,0 +1,105 @@
+# Production-profile hardening after independent review, sanitized excerpt
+
+Date: 2026-09-22
+Scope: independent code/architecture review, local TDD fixes, SteamOS software
+regression and public-installer upgrade. The controller was absent for the final
+identity-gated replay, so no game or physical ForceAdapt output occurred.
+
+## Review result before fixes
+
+Independent code and architecture lanes both blocked production release. Their
+overlapping P0 findings were:
+
+- the public write switch selected a compatibility mapping different from the
+  physically accepted bounded semantic path;
+- non-boolean JSON such as `"adaptive_triggers": "false"` was truthy and could
+  enable writes;
+- the public installer merged into an active tree, did not restart an already
+  running relay, and uninstall omitted the transient manual writer;
+- unrestricted writes could retain an effect indefinitely when output stopped;
+- current README/status documents still described superseded mild-only work.
+
+Additional findings were an overly broad mode allowlist, a standalone writer
+that did not share the relay lock, and limited effect types parsed without an
+explicit supported/unsupported contract.
+
+## Implemented production contract
+
+The named `ow2-safe` profile is now the only config-selectable live profile.
+It accepts only the exact captured right-trigger patterns:
+
+```text
+0x26 ff030000000000001500 -> mode 2 (0,1,32,21,0)
+0x21 ff039224491200000000 -> mode 1 (0,40,0,0,0)
+0x05                      -> Normal and rearm
+```
+
+It requires rattle before resistance, ignores L2/unknown/out-of-order effects,
+enforces a non-sliding four-second cycle deadline, waits for game Off before
+rearming after timeout, and has no three-cycle product limit. The compatibility
+translator remains available for comparison/replay but is not a named live
+profile. Fixed wrapper modes `ow2-safe-dry-run` and `ow2-safe-write` use the
+same translator and gate.
+
+Configuration now uses `trigger_profile: disabled|ow2-safe`. Older boolean
+`adaptive_triggers` values migrate to the corresponding named profile;
+non-boolean values and mixed old/new keys fail closed. The legacy CLI flag is a
+deprecated alias for `ow2-safe`, not the compatibility translator.
+
+Runtime modes 4/5 were removed from the write allowlist, limited DualSense
+types 0x11/0x12 are explicitly unsupported, and the standalone real-write tool
+must acquire the same relay lock before opening the device.
+
+## Installer convergence
+
+The public installer now stages and compiles a complete runtime beside the
+target, stops and waits for both manual and daily writers, atomically replaces
+the tree while retaining a unique backup, reloads systemd, explicitly enables
+and restarts the service, verifies it became active, and restores the previous
+runtime if enable/restart fails. `--no-hide-pad` removes the owned old hide file.
+Uninstall stops the transient writer before removing files.
+
+Failure-injection tests cover a manual writer that refuses to stop and a failed
+service enable, in addition to stale-file removal, notices, hide-file cleanup
+and manual-writer uninstall.
+
+## Verification
+
+Local: 145/145 tests PASS, Python compilation, shell syntax, shellcheck and
+production/test/doc diff checks PASS. The preserved raw Steam evidence remains
+an explicit `diff --check` exception because it contains original CRLF/trailing
+spaces.
+
+SteamOS: 145 tests ran, 144 PASS and the portable C test skipped because no C
+compiler was installed. The public `install.sh --force` performed a real
+upgrade twice, retained unique prior-runtime backups, restarted the installed
+service from the installed path, and migrated the existing legacy false config
+to `trigger_profile=disabled`. Installed preview exposes the fixed
+`ow2-safe-write` contract.
+
+The final five-cycle real virtual-controller dry-run did not start because the
+physical controller was off/disconnected: preflight found no unique project
+Edge and failed closed before creating a manual session. No physical write or
+game launch occurred. This is the only remaining machine gate before post-fix
+independent re-review and a holder-approved production-profile game run.
+
+## Post-review closure
+
+The first post-fix review reduced BLOCK to two medium documentation/systemd
+state issues plus one architecture watch for HID lifecycle reset. Follow-up
+commits made systemd query errors distinct from verified inactive states,
+reset the continuous gate after UHID CLOSE/STOP, and rearm it after physical
+transport reconnect only after the replacement transport successfully receives
+initial bilateral Normal. Bounded diagnostic gates do not implement the reset
+hook and remain aborted after disconnect.
+
+Final local verification at `0691bac`: 148/148 tests PASS, Python compilation,
+shell syntax, shellcheck and non-raw-evidence diff checks PASS. The independent
+code reviewer returned APPROVE with zero remaining critical/high/medium issues;
+the independent architecture reviewer returned CLEAR with no blocker/watch.
+
+The SteamOS host went offline before the final commits could be installed.
+Therefore merge-readiness is locally reviewed, while production activation is
+still gated on installing the final archive, controller-present five-cycle
+`ow2-safe-dry-run`, one holder-approved five-action production game block, exit
+recovery and the user's explicit decision whether to retain `ow2-safe-write`.

@@ -1,0 +1,125 @@
+# Lifecycle hardening and bounded dry-run validation, sanitized excerpt
+
+Date: 2026-09-21
+Scope: SteamOS software, service lifecycle and virtual-output dry-run; no game
+launch and no physical ForceAdapt write
+
+Credentials, network addresses, account identifiers, physical device paths and
+process ids are omitted. The host's dirty checkout remained unchanged.
+
+## Baseline and tests
+
+Starting state was one installed Edge relay, no manual relay,
+`adaptive_triggers=False`, one project Edge identity and zero ordinary
+DualSense identities. The host checkout remained at its older dirty revision.
+
+```text
+Ran 96 tests in 0.319s
+OK (skipped=1)
+python compilation: PASS
+shell syntax: PASS
+```
+
+The skip is the existing portable C test on a host without a C compiler.
+
+## Profile lifecycle
+
+A harmless child ran through the new wrapper. During the child there was one
+ordinary DualSense and zero Edge identities. After child exit there was one
+Edge, zero ordinary DualSense, one installed relay process, daily service active
+and manual service inactive.
+
+A second harmless child installed a SIGTERM-ignore handler and slept. SIGTERM
+was sent to the wrapper after the child reported ready. The wrapper returned
+143 after its bounded terminate/kill path. The child was absent afterward, and
+the same unique Edge/daily-service state was restored.
+
+## Bounded policy dry-run
+
+The temporary relay used ordinary DualSense plus:
+
+```text
+--trigger-bounded-mild-right --trigger-dry-run --trigger-debug --hid-debug
+```
+
+Four virtual R2 mild/Off cycles were injected. The relay accepted exactly the
+first three cycles. Each accepted cycle produced:
+
+```text
+DRY-RUN APEX4 R2: mode=1 params=(60, 40, 0, 0, 0)
+DRY-RUN APEX4 R2: mode=0 params=(0, 0, 0, 0, 0)
+```
+
+The fourth resistance and Off produced no translated write because the cycle
+budget was exhausted. Trigger dry-run was active, so these were final packet
+decisions only; no APEX 4 trigger command was written.
+
+## Deployment and Steam option
+
+The tracked runtime at `dbde16f` was staged, compiled and previewed before an
+atomic install-directory swap. The prior runtime remains in a recoverable
+backup. Installed smoke switching again produced one ordinary DualSense during
+the child and restored one Edge afterward. Relay and profile-session lock files
+were mode `0600`.
+
+The OW2 launch option now includes both `--relay-profile dualsense` and
+`--relay-trigger-mode bounded-dry-run`. Its prior value was backed up. Steam was
+stopped under a temporary runtime mask, restarted, and the new value persisted
+as exactly one entry. No OW2 process was launched.
+
+Final state: `adaptive_triggers=False`, daily service active, manual service
+inactive, exactly one Edge, zero ordinary DualSense and one installed relay.
+
+## First actual OW2 bounded dry-run
+
+After explicit confirmation, OW2 started with the bounded dry-run launch option.
+The game process, one ordinary DualSense and the dry-run safety banner were all
+observed. The holder completed three full Hanzo charges.
+
+The first two resistance cycles were accepted about seven seconds apart. Each
+produced R2 mode 1 `(60,40)` and a Normal one second later. The original
+ten-second total window then expired and forced another Normal; the third human
+action was rejected. There was no physical trigger write or write failure.
+After the user exited the game, the wrapper and game disappeared and one Edge
+with one installed relay was restored.
+
+Result: cycle limiting and resets PASS, but the ten-second interaction window
+does not fit three normal user-paced actions. The default was changed to thirty
+seconds while retaining at most three one-second active cycles, so maximum
+active output remains three seconds. The corrected window requires another OW2
+dry-run before physical testing.
+
+## Thirty-second correction
+
+The corrected `e2338b8` candidate ran 97 SteamOS tests: 96 passed and the same
+portable C test skipped. Three synthetic mild/Off cycles spaced seven seconds
+apart were all accepted as R2 mode 1 `(60,40)` followed by Normal. An immediate
+fourth cycle was still rejected by the three-cycle budget. The runtime was then
+deployed through the same recoverable directory swap. The Steam option did not
+need another change. A repeated actual OW2 dry-run remains required.
+
+## Repeated actual OW2 dry-run
+
+The holder repeated three full Hanzo charges after the thirty-second build was
+deployed. The relay emitted bounded R2 mode 1 `(60,40)` at 20:43:30, 20:43:33
+and 20:43:36. Each cycle was followed by mode 0 Normal. No fourth cycle,
+ForceAdapt write, traceback or write failure appeared.
+
+After normal game exit the OW2 and wrapper processes were absent, the manual
+relay was inactive, the installed daily service was active, and the host had
+exactly one Edge, zero ordinary DualSense and one relay process.
+
+Result: repeated real-game input through the bounded policy is a dry-run PASS.
+Physical repeated resistance and all rattle behavior remain untested.
+
+## Prepared physical-mode gate
+
+Commit `4cf1515` adds one allowlisted wrapper choice named `bounded-write`. It
+uses the same R2-only resistance policy and removes only trigger dry-run. Local
+tests were 99/99; SteamOS ran 99 tests with 98 passing and the portable C test
+skipped. Preview printed the physical scope and the runtime was deployed through
+the recoverable swap.
+
+The persisted Steam option remained `bounded-dry-run`, no `bounded-write` value
+was present, and `adaptive_triggers=False`. This section proves readiness only;
+it contains no physical trigger write.

@@ -1,0 +1,82 @@
+# OW2 synchronized native-output capture, sanitized excerpt
+
+Date: 2026-09-21
+Scope: one OW2 practice-range dry-run with Hanzo, an ordinary virtual
+DualSense and the deployed `translation-dry-run` profile. ForceAdapt writes
+were disabled. The holder completed a slow R2 press/release and two complete
+charge/hold/release actions, for three trigger cycles in total.
+
+## Input paths
+
+The read-only observer recorded paired activity from the physical Flydigi
+gamepad and the virtual Sony gamepad during the action window. It recorded no
+button or trigger event from the resident Valve Xbox-style gamepad. The
+physical and virtual trigger ranges both reached 0..255.
+
+This does not prove why OW2 renders Xbox glyphs. It does rule out an active
+duplicate Xbox input path in this sample. Because control remained normal and
+the native Sony output corresponded to the actions, the glyph style is a
+non-blocking UI behavior for this project unless later evidence shows a mapping
+or duplicate-input fault.
+
+The observer originally treated physical axis codes `0x02/0x05` as possible
+triggers. That was a diagnostic-labelling bug: Flydigi triggers are
+`0x09/0x0a`, while Sony/Xbox triggers are `0x02/0x05`. The tool and regression
+test were corrected before this evidence was summarized; the conclusion above
+uses source-specific axes.
+
+## Game output and physical R2 position
+
+Three holder-correlated cycles were captured on one monotonic timeline:
+
+| cycle | `0x26` rattle | `0x21` resistance | delay | `0x05` Off |
+|---|---:|---:|---:|---:|
+| 1 | R2=12 | R2=228 | 0.720 s | R2=0 |
+| 2 | R2=11 | R2=129 | 0.736 s | R2=0 |
+| 3 | R2=14 | R2=255 | 0.719 s | R2=0 |
+
+The game therefore starts rattle near the beginning of the pull, changes to
+resistance about 0.72 seconds later, and sends Off on release. Resistance did
+not consistently arrive only at full travel, so the earlier "already fully
+pressed" explanation for an unfelt bounded resistance is rejected.
+
+Two `0x26 -> 0x05` transitions at physical R2=2 occurred before the announced
+action block. They are retained in the fixture as uncorrelated pre-action
+transitions and are not counted as holder actions.
+
+## Captured vectors and translation decisions
+
+Representative complete HID output reports are stored in
+`tests/fixtures/ow2-hanzo-2026-09-21.json` and replayed by the test suite. The
+right-trigger decisions were:
+
+```text
+0x26 params ff030000000000001500
+  compatibility: mode 2 (0,1,120,21,0)
+  semantic:      mode 2 (0,1,32,21,0)
+
+0x21 params ff039224491200000000
+  compatibility: mode 1 (1,64,0,0,0)
+  semantic:      mode 1 (0,96,0,0,0)
+
+0x05 params 00000000000000000000
+  both:          Normal
+```
+
+The compatibility profile materially changes decoded intensity/region rather
+than merely encoding the same semantics. Software replay cannot determine
+which physical approximation is preferable. Mode 2 rattle has no holder
+acceptance, and the semantic mode 1 strength 96 is outside the previously
+described mild `(60,40)` resistance envelope. Each requires its own explicit,
+bounded physical authorization before live use.
+
+## Exit recovery and evidence boundary
+
+After normal game exit, the machine check found zero OW2 processes, zero
+profile-wrapper processes, the daily service active, the manual service
+inactive, exactly one project Edge, zero ordinary project DualSense identities
+and exactly one installed relay process. Stage C is complete.
+
+No physical effect, comfort, ForceAdapt reset or unrestricted live profile
+passed in this run. Exit recovery here is the already verified identity/service
+lifecycle, not evidence that a physical effect was cleared.

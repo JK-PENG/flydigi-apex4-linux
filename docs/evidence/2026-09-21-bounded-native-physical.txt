@@ -1,0 +1,67 @@
+# Bounded native OW2 physical acceptance, sanitized excerpt
+
+Date: 2026-09-21
+Scope: one explicitly authorized R2 game cycle over the 2.4 GHz connection.
+The approved policy was mode 2 strength <=32, followed by mode 1 strength
+<=40 if the game changed effect, at most one accepted cycle and one second of
+total adaptive-trigger output before bilateral Normal.
+
+## Preflight and launch
+
+Preflight found no OW2 process, the daily Edge service active, the manual
+service inactive, one persisted `translation-dry-run` option and
+`adaptive_triggers=false`. The launch option was backed up and changed to the
+fixed `native-write` wrapper mode only after holder authorization. The first
+Steam request did not launch OW2 or start a lasting manual relay; the announced
+retry did. Before the holder action, the identity gate had accepted the
+controller, both sides had been cleared to Normal, and zero non-Normal cycles
+had been consumed.
+
+## Machine timeline
+
+```text
+22:24:12.199  R2 mode 2 (0,1,32,21,0)
+22:24:12.936  R2 mode 1 (0,40,0,0,0)
+22:24:13.204  safety deadline: L2 Normal, R2 Normal
+22:24:15.533  game 0x05 Off at R2 release
+22:24:15.548  ordinary rumble reaches (255,255) for about 0.13 s
+```
+
+The native rattle-to-resistance change occurred after about 0.736 seconds and
+did not extend the one-second deadline. There was no ForceAdapt write failure.
+The game Off arrived after the policy had already cleared the trigger, so this
+sample proves safety-timeout clear, not an Off-driven clear while an adaptive
+effect is active.
+
+## Holder evidence and release vibration
+
+The holder distinctly felt both vibration and resistance. They also reported a
+stronger vibration after releasing R2. Output-report replay separates it from
+the adaptive trigger: after the trigger had already been Normal for about 2.33
+seconds, the game sent conventional rumble at `(255,255)` immediately after
+Off for roughly 0.13 seconds. The relay forwarded that through the normal pad
+motors. It was therefore game rumble associated with release/shot, not a second
+trigger cycle, stale rattle or reset failure.
+
+After exit and profile restoration, the holder confirmed that R2 had completely
+returned to its normal travel with no residual resistance or sustained
+vibration.
+
+## Exit and rollback
+
+After normal exit: OW2=0, wrapper=0, daily service active, manual service
+inactive, one Edge, zero ordinary DualSense and one relay. Steam was stopped
+under its temporary runtime mask; the exact launch-option string was changed
+back to `translation-dry-run` with a backup, then Steam was restarted. Final
+configuration was one translation dry-run option, zero native-write options and
+`adaptive_triggers=false`.
+
+## Acceptance boundary
+
+One captured OW2 R2 cycle has holder and machine PASS for two distinguishable
+physical modes, machine PASS for the one-second Normal attempt and identity
+restoration, and holder PASS for final normal trigger travel. It does not yet
+establish repeated cycles, active-effect Off clearing, L2, cable behavior,
+comfort at unrestricted strength, or long-term stability. The stronger release
+vibration is ordinary rumble and should be evaluated under the existing rumble
+feature, not used to tune trigger strength.

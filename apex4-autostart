@@ -1,0 +1,163 @@
+#!/usr/bin/env bash
+# SPDX-License-Identifier: MIT
+#
+# 开机自启开关：让 APEX 4 中继（虚拟 DualSense/Edge）在每次开机时自动运行，
+# 包括 SteamOS 的大屏模式（Gaming Mode）。关机再开机同样有效。
+#
+#   ./apex4-autostart on       开启自启（现在也立刻启动）
+#   ./apex4-autostart off      关闭自启（同时停止现在的进程）
+#   ./apex4-autostart status   只看状态，不改动
+#   ./apex4-autostart          交互菜单（桌面快捷方式用）
+#
+# 机制：用户级 systemd 单元 flydigi-apex4.service（WantedBy=default.target）。
+# SteamOS 开机自动登录 deck 用户 -> systemd --user 启动 default.target ->
+# 单元随之启动，大屏模式和桌面模式都覆盖。日志：journalctl --user -u flydigi-apex4
+set -euo pipefail
+
+UNIT="flydigi-apex4.service"
+UNIT_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/systemd/user"
+ENV_FILE="${XDG_CONFIG_HOME:-$HOME/.config}/environment.d/apex4-ds5.conf"
+PREFIX="${XDG_DATA_HOME:-$HOME/.local/share}/flydigi-apex4"
+SELF_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+say()  { printf '%s\n' "$*"; }
+warn() { printf '%s\n' "$*" >&2; }
+die()  { printf '%s\n' "$*" >&2; exit 1; }
+
+need_user_manager() {
+  systemctl --user show-environment >/dev/null 2>&1 \
+    || die "没有可用的用户级 systemd。请在图形会话的终端里运行（桌面模式或大屏模式）。"
+}
+
+find_template() {
+  local candidate
+  for candidate in \
+      "$PREFIX/systemd/flydigi-apex4.service" \
+      "$SELF_DIR/systemd/flydigi-apex4.service" \
+      "$SELF_DIR/../systemd/flydigi-apex4.service"; do
+    if [ -f "$candidate" ]; then
+      printf '%s\n' "$candidate"
+      return 0
+    fi
+  done
+  return 1
+}
+
+# 单元文件缺失时按模板重建，这样“开启自启”不会因为一次误删而卡死。
+ensure_unit() {
+  local target template
+  target="$UNIT_DIR/$UNIT"
+  if [ -f "$target" ]; then
+    return 0
+  fi
+  template="$(find_template)" || die "找不到 systemd 单元模板。请先在项目目录里运行 ./install.sh。"
+  mkdir -p "$UNIT_DIR"
+  sed "s|%PREFIX%|$PREFIX|g" "$template" > "$target"
+  systemctl --user daemon-reload
+  say "已重建服务单元：$target"
+}
+
+is_enabled() { systemctl --user is-enabled --quiet "$UNIT" 2>/dev/null; }
+is_active()  { systemctl --user is-active  --quiet "$UNIT" 2>/dev/null; }
+
+# 虚拟手柄是否已经在系统里出现 —— 只看状态，不碰设备。
+virtual_present() {
+  local uevent
+  for uevent in /sys/class/hidraw/hidraw*/device/uevent; do
+    [ -r "$uevent" ] || continue
+    if grep -q -e "HID_ID=0003:0000054C:00000DF2" -e "HID_ID=0003:0000054C:00000CE6" "$uevent"; then
+      return 0
+    fi
+  done
+  return 1
+}
+
+show_status() {
+  local enabled_text active_text device_text
+  if is_enabled; then enabled_text="已开启（下次开机会自动启动）"; else enabled_text="已关闭（开机不会启动）"; fi
+  if is_active; then active_text="运行中"; else active_text="已停止"; fi
+  if virtual_present; then device_text="已出现（Steam 能看到虚拟手柄）"; else device_text="未出现"; fi
+  say "开机自启 : $enabled_text"
+  say "当前进程 : $active_text"
+  say "虚拟手柄 : $device_text"
+}
+
+hint_hidden_pad() {
+  if [ -f "$ENV_FILE" ]; then
+    say
+    say "注意：物理手柄仍被 SDL 隐藏（$ENV_FILE）。"
+    say "      现在停止中继的话，Steam 会看不到任何手柄。恢复物理手柄要删除该文件并重启 Steam。"
+  fi
+}
+
+cmd_on() {
+  need_user_manager
+  ensure_unit
+  say "==> 开启开机自启"
+  systemctl --user enable "$UNIT" >/dev/null
+  say "==> 现在启动中继"
+  systemctl --user start "$UNIT"
+  sleep 1
+  say
+  show_status
+  if ! is_active; then
+    warn
+    warn "服务没有进入运行状态，最近日志："
+    journalctl --user -u "$UNIT" -n 15 --no-pager >&2 || true
+    exit 1
+  fi
+}
+
+cmd_off() {
+  need_user_manager
+  say "==> 关闭开机自启"
+  systemctl --user disable --now "$UNIT" >/dev/null 2>&1 || systemctl --user stop "$UNIT" >/dev/null 2>&1 || true
+  sleep 1
+  say
+  show_status
+  hint_hidden_pad
+}
+
+cmd_status() {
+  need_user_manager
+  show_status
+}
+
+menu() {
+  local choice
+  while true; do
+    cat <<'EOF'
+
+Flydigi APEX 4 —— 开机自启开关
+
+  1) 开启自启（开机会自动启动）
+  2) 关闭自启（同时停止现在的进程）
+  3) 查看状态
+  q) 退出
+EOF
+    read -r -p "请选择 [1/2/3/q]: " choice || choice=q
+    case "$choice" in
+      1) cmd_on ;;
+      2) cmd_off ;;
+      3) cmd_status ;;
+      q|Q|"") break ;;
+      *) say "输入无效，请选 1、2、3 或 q。" ;;
+    esac
+    [ -t 0 ] || break
+  done
+  printf '\n按回车键关闭窗口 … '
+  read -r _ || true
+}
+
+usage() {
+  sed -n '4,14p' "$0" | sed 's/^# \{0,1\}//'
+}
+
+case "${1:-}" in
+  on|enable)      cmd_on ;;
+  off|disable)    cmd_off ;;
+  status|"")      if [ "$#" -eq 0 ] && [ -t 1 ] && [ -t 0 ]; then menu; else cmd_status; fi ;;
+  toggle)         if is_enabled; then cmd_off; else cmd_on; fi ;;
+  -h|--help|help) usage ;;
+  *) warn "未知参数：$1"; usage >&2; exit 2 ;;
+esac

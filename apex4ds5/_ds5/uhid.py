@@ -18,6 +18,7 @@ virtual DualSense, and it is small enough not to warrant a native library.
 import ctypes
 import os
 import select
+import time
 
 UHID_DEVICE = "/dev/uhid"
 
@@ -157,11 +158,12 @@ class Device:
 
     def __init__(self, name, vendor, product, report_descriptor,
                  phys="", uniq="", bus=BUS_USB, version=0, country=0,
-                 feature_reports=None):
+                 feature_reports=None, trace=None):
         # Answers to UHID_GET_REPORT, keyed by report number. A driver probing
         # the device (hid-playstation does this for DualSense calibration and
         # pairing info) will fail and detach if these come back empty.
         self.feature_reports = dict(feature_reports or {})
+        self.trace = trace
         if len(report_descriptor) > _RD_MAX:
             raise ValueError("report descriptor too large")
         try:
@@ -193,6 +195,7 @@ class Device:
         self.name = name
         self._started = False
         self._open = False
+        self._close_count = 0
 
     def _write(self, event):
         written = os.write(self.fd, bytes(memoryview(event).cast("B")))
@@ -208,6 +211,12 @@ class Device:
         event.u.input2.size = len(data)
         ctypes.memmove(event.u.input2.data, bytes(data), len(data))
         self._write(event)
+
+    def _trace(self, kind, detail=""):
+        if self.trace is not None:
+            # UHID events carry no originating userspace PID. Never label a
+            # host packet as game-originated solely because it arrived here.
+            self.trace("HID t=%.6f %s %s" % (time.monotonic(), kind, detail))
 
     def poll(self, timeout=0.0):
         """Yield (rtype, data) for each output report the kernel hands us.
@@ -228,15 +237,25 @@ class Device:
 
             if event.type == UHID_START:
                 self._started = True
+                self._trace("START")
             elif event.type == UHID_STOP:
                 self._started = False
+                self._close_count += 1
+                self._trace("STOP")
             elif event.type == UHID_OPEN:
                 self._open = True
+                self._trace("OPEN")
             elif event.type == UHID_CLOSE:
                 self._open = False
+                self._close_count += 1
+                self._trace("CLOSE")
             elif event.type == UHID_OUTPUT:
                 out = event.u.output
                 size = min(out.size, _DATA_MAX)
+                if self.trace is not None:
+                    self._trace("OUTPUT", "rtype=%d len=%d data=%s" % (
+                        out.rtype, size, bytes(out.data[:size]).hex(" ")
+                        if out.rtype == HID_REPORT_TYPE_OUTPUT else "<omitted>"))
                 yield out.rtype, bytes(bytearray(out.data[:size]))
             elif event.type == UHID_GET_REPORT:
                 rnum = event.u.get_report.rnum
@@ -253,6 +272,9 @@ class Device:
                     ctypes.memmove(reply.u.get_report_reply.data,
                                    bytes(payload), len(payload))
                 self._write(reply)
+                self._trace("GET_REPORT", "id=%d rnum=0x%02x rtype=%d len=%d err=%d" % (
+                    event.u.get_report.id, rnum, event.u.get_report.rtype,
+                    reply.u.get_report_reply.size, reply.u.get_report_reply.err))
             elif event.type == UHID_SET_REPORT:
                 setr = event.u.set_report
                 size = min(setr.size, _DATA_MAX)
@@ -261,6 +283,10 @@ class Device:
                 reply.u.set_report_reply.id = setr.id
                 reply.u.set_report_reply.err = 0
                 self._write(reply)
+                self._trace("SET_REPORT", "id=%d rnum=0x%02x rtype=%d len=%d err=0 data=%s" % (
+                    setr.id, setr.rnum, setr.rtype, size,
+                    bytes(setr.data[:size]).hex(" ")
+                    if setr.rtype == HID_REPORT_TYPE_OUTPUT else "<omitted>"))
                 yield setr.rtype, bytes(bytearray(setr.data[:size]))
             timeout = 0.0  # drain anything else already queued
 
@@ -273,6 +299,11 @@ class Device:
     def opened(self):
         """True while something has the device open for reading."""
         return self._open
+
+    @property
+    def close_count(self):
+        """Monotonic CLOSE/STOP count for stateful-output cleanup."""
+        return self._close_count
 
     def destroy(self):
         if self.fd is None:

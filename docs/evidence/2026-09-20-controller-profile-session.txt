@@ -1,0 +1,138 @@
+# OW2 controller-profile session, sanitized excerpt
+
+Date: 2026-09-20
+Scope: no game launch and no adaptive-trigger output; staged validation followed
+by a backed-up runtime deployment and launch-option update
+
+Initial validation copied the new source and tests only to the existing
+independent diagnostic directory, without modifying the host's dirty checkout
+or older installed tree. Deployment occurred only after those checks passed;
+the dirty checkout remained untouched and the old install became a backup.
+Credentials, network addresses, account identifiers, physical device paths and
+process ids are omitted.
+
+## Software baseline
+
+```text
+Ran 78 tests in 0.132s
+OK (skipped=1)
+python compilation: PASS
+```
+
+The one skip is the existing portable C test on a host without a C compiler.
+
+## Preview is non-mutating
+
+Starting state:
+
+```text
+flydigi-apex4.service: active/running
+apex4-relay-manual.service: inactive/dead
+adaptive_triggers=False
+configured identity=dualsense-edge
+virtual identity=054c:0df2, HID_NAME=Apex 4 (DualSense Edge)
+```
+
+Preview output included all three physical-device filters and:
+
+```text
+Relay plan: Edge -> DualSense -> Edge (OW2 opt-in).
+Preview only. No command started and no device permissions changed.
+```
+
+The service and identity state was unchanged after preview.
+
+## Harmless child transition
+
+The wrapper ran a Python identity observer instead of Proton or a game. During
+the child window:
+
+```text
+CHILD_MANUAL_ACTIVE=True
+CHILD_DUALSENSE=True
+CHILD_EXCLUSIVE_DUALSENSE=True
+virtual identity=054c:0ce6, HID_NAME=Apex 4 (DualSense)
+```
+
+After the child returned zero:
+
+```text
+flydigi-apex4.service: active/running
+apex4-relay-manual.service: inactive/dead
+virtual identity=054c:0df2, HID_NAME=Apex 4 (DualSense Edge)
+relay process count=1
+FINAL_EXCLUSIVE_EDGE=True
+```
+
+A second harmless child deliberately returned 17:
+
+```text
+WRAPPER_STATUS=17
+flydigi-apex4.service=active
+apex4-relay-manual.service=inactive
+EDGE_RESTORED=True
+```
+
+The manual-relay journal for both windows contained no `APEX4 L2`, `APEX4 R2`,
+ForceAdapt or write-failure line. This proves the non-game service and identity
+transition plus child exit-code preservation. It does not prove a deployed OW2
+launch.
+
+## Backed-up deployment
+
+The full tracked runtime at commit `b820aee` was unpacked to a new directory and
+passed Python compilation plus wrapper preview before service interruption. The
+daily service was then stopped, the old install moved to a recoverable backup,
+and the new directory moved into the existing service path. Validation after
+start showed:
+
+```text
+flydigi-apex4.service=active/running
+apex4-relay-manual.service=inactive/dead
+installed relay process count=1
+installed virtual identity=one Edge, zero ordinary DualSense
+relay lock mode=0600
+adaptive_triggers=False
+```
+
+The installed wrapper then ran the harmless observer. Its child saw exactly one
+ordinary DualSense and no Edge; after exit the host again had exactly one Edge
+and no ordinary DualSense. No trigger or write-failure line appeared.
+
+The OW2 launch option was changed from the earlier filter/debug wrapper to the
+installed `--run --relay-profile dualsense -- %command%` form. The configuration
+file was backed up first. Steam was stopped under a temporary runtime mask,
+unmasked and restarted; five seconds later there was exactly one new option and
+zero old options. No OW2 process was started. Actual game launch remains a
+separate user-confirmation boundary.
+
+## Actual OW2 wrapper session
+
+After explicit confirmation, OW2 was launched through Steam AppID `2357570`.
+The preflight state was one project Edge identity, zero ordinary DualSense,
+installed daily service active, manual service inactive, and
+`adaptive_triggers=False`.
+
+During the game window the wrapper command contained the installed
+`--relay-profile dualsense` option and a real `Overwatch.exe` process was
+present. Machine state was:
+
+```text
+flydigi-apex4.service: inactive/dead
+apex4-relay-manual.service: active/running
+virtual identity: zero Edge, exactly one ordinary DualSense
+```
+
+The user later reported that the game had exited. Post-exit checks showed no OW2
+or wrapper process, the manual service inactive, the daily service active,
+exactly one project Edge, zero ordinary DualSense, and one installed relay
+process. The session journal contained no traceback, ForceAdapt, trigger write,
+or write-failure line.
+
+Result: actual-game automatic profile switch and restoration is a machine-level
+PASS. Physical trigger behavior was intentionally not exercised. The user did
+not initially state whether the controller operated the menu, so that evidence
+was kept UNKNOWN rather than inferred from the exit report. In the following
+turn the holder explicitly confirmed normal menu control, promoting the OW2
+controller-input check to PASS. Physical trigger behavior remains outside this
+session's authorization.

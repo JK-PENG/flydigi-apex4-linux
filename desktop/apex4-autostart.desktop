@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Version=1.0
+Name=APEX 4 开机自启（开/关）
+Comment=开启后每次开机（含 SteamOS 大屏模式）自动启动 Flydigi APEX 4 中继
+Exec=%PREFIX%/apex4-autostart
+Icon=input-gaming
+Terminal=true
+Categories=Utility;Settings;
+Keywords=gamepad;controller;flydigi;apex4;autostart;

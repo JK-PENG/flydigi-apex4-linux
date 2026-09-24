@@ -1,0 +1,15 @@
+	"apps"
+	{
+		"3280350"
+		{
+			"UseSteamControllerConfig"		"2"
+			"SteamControllerRumble"		"-1"
+			"SteamControllerRumbleIntensity"		"320"
+		}
+		"2357570"
+		{
+			"UseSteamControllerConfig"		"0"
+			"SteamControllerRumble"		"-1"
+			"SteamControllerRumbleIntensity"		"320"
+		}
+	}

@@ -1,0 +1,39 @@
+Sanitized excerpt; Windows line endings normalized. This is not the full Wine log.
+Date: 2026-09-13
+Proton: 1788504981 proton-11.0-2c-x86_64
+Runtime: Steam Linux Runtime 4, 4.0.20260805.254769
+Context: independent diagnostic prefix, SteamAppId=0 and SteamGameId=0
+Relay: --trigger-dry-run --trigger-debug --hid-debug
+Probe SHA256: 2fd140ff28ef7f83b4909ae61ebe7f6f9c235c5d028a38da29eb6c5e9c21b444
+No --write flag was passed. No physical effect acceptance is claimed.
+
+CALL relay pairing identity report=0x09 len=20
+RESULT relay pairing identity ok=1 winerror=0
+PAIRING_TEMPLATE_MATCH=1
+DEVICE 0 vid=054c pid=0df2 version=0000 usage=0001/0005 input=64 output=48 relay=1
+  product=Wireless Controller
+CALL HidD_GetFeature report=0x05 len=41
+RESULT HidD_GetFeature ok=1 winerror=0
+CALL HidD_GetFeature report=0x09 len=20
+RESULT HidD_GetFeature ok=1 winerror=0
+CALL HidD_GetFeature report=0x0b len=42
+RESULT HidD_GetFeature ok=1 winerror=0
+CALL HidD_GetFeature report=0x20 len=64
+RESULT HidD_GetFeature ok=1 winerror=0
+CALL HidD_GetInputReport report=0x01 len=64
+RESULT HidD_GetInputReport ok=1 winerror=0
+
+The complete enumeration contained no vid=04b4 pid=2412 entry. It did contain:
+DEVICE 4 vid=28de pid=11ff version=0000 usage=0001/0005 input=15 output=0 relay=0
+Therefore this isolated AppID=0 run is not evidence of a Sony-only game environment.
+
+Corresponding relay GET_REPORT excerpt (monotonic seconds):
+HID t=20336.205298 GET_REPORT id=19 rnum=0x09 rtype=0 len=20 err=0
+HID t=20336.205501 GET_REPORT id=20 rnum=0x05 rtype=0 len=41 err=0
+HID t=20336.205674 GET_REPORT id=21 rnum=0x09 rtype=0 len=20 err=0
+HID t=20336.205828 GET_REPORT id=22 rnum=0x0b rtype=0 len=42 err=0
+HID t=20336.205972 GET_REPORT id=23 rnum=0x20 rtype=0 len=64 err=0
+
+No corresponding input-type UHID GET_REPORT was observed in this window.
+HidD_GetInputReport success may be satisfied by Wine's cached input; it does not
+establish implementation of a direct input-snapshot request in this relay.

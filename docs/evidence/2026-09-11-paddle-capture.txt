@@ -1,0 +1,593 @@
+Sep 11 21:46:11 Machine systemd[1711]: Started [systemd-run] /usr/bin/python3 -u /tmp/pos-capture.py 1200.
+Sep 11 21:46:11 Machine python3[26634]: vendor  /dev/hidraw11
+Sep 11 21:46:11 Machine python3[26634]: virtual /dev/hidraw13
+Sep 11 21:46:11 Machine python3[26634]: READY -- press when told
+Sep 11 21:46:11 Machine python3[26634]: 21:46:11 VENDOR  0x00
+Sep 11 21:46:11 Machine python3[26634]: 21:46:11 VIRTUAL 0x00
+Sep 11 21:46:35 Machine python3[26634]: 21:46:35 VENDOR  0x08
+Sep 11 21:46:35 Machine python3[26634]: 21:46:35 VIRTUAL 0x10  -> fn1
+Sep 11 21:46:35 Machine python3[26634]: 21:46:35 VENDOR  0x00
+Sep 11 21:46:35 Machine python3[26634]: 21:46:35 VIRTUAL 0x00
+Sep 11 21:46:54 Machine python3[26634]: 21:46:54 VENDOR  0x10
+Sep 11 21:46:54 Machine python3[26634]: 21:46:54 VIRTUAL 0x20  -> fn2
+Sep 11 21:46:54 Machine python3[26634]: 21:46:54 VENDOR  0x00
+Sep 11 21:46:54 Machine python3[26634]: 21:46:54 VIRTUAL 0x00
+Sep 11 21:46:56 Machine python3[26634]: 21:46:56 VENDOR  0x20
+Sep 11 21:46:56 Machine python3[26634]: 21:46:56 VIRTUAL 0x80  -> paddle-right
+Sep 11 21:46:57 Machine python3[26634]: 21:46:57 VENDOR  0x00
+Sep 11 21:46:57 Machine python3[26634]: 21:46:57 VIRTUAL 0x00
+Sep 11 21:47:14 Machine python3[26634]: 21:47:14 VENDOR  0x04
+Sep 11 21:47:14 Machine python3[26634]: 21:47:14 VIRTUAL 0x40  -> paddle-left
+Sep 11 21:47:14 Machine python3[26634]: 21:47:14 VENDOR  0x00
+Sep 11 21:47:14 Machine python3[26634]: 21:47:14 VIRTUAL 0x00
+Sep 11 21:47:15 Machine python3[26634]: 21:47:15 VENDOR  0x08
+Sep 11 21:47:15 Machine python3[26634]: 21:47:15 VIRTUAL 0x10  -> fn1
+Sep 11 21:47:15 Machine python3[26634]: 21:47:15 VENDOR  0x00
+Sep 11 21:47:15 Machine python3[26634]: 21:47:15 VIRTUAL 0x00
+Sep 11 21:51:32 Machine python3[26634]: 21:51:32 VENDOR  0x04
+Sep 11 21:51:32 Machine python3[26634]: 21:51:32 VIRTUAL 0x40  -> paddle-left
+Sep 11 21:51:32 Machine python3[26634]: 21:51:32 VENDOR  0x00
+Sep 11 21:51:32 Machine python3[26634]: 21:51:32 VIRTUAL 0x00
+Sep 11 21:51:34 Machine python3[26634]: 21:51:34 VENDOR  0x08
+Sep 11 21:51:34 Machine python3[26634]: 21:51:34 VIRTUAL 0x10  -> fn1
+Sep 11 21:51:34 Machine python3[26634]: 21:51:34 VENDOR  0x00
+Sep 11 21:51:34 Machine python3[26634]: 21:51:34 VIRTUAL 0x00
+Sep 11 21:52:40 Machine python3[26634]: 21:52:40 VENDOR  0x04
+Sep 11 21:52:40 Machine python3[26634]: 21:52:40 VIRTUAL 0x40  -> paddle-left
+Sep 11 21:52:41 Machine python3[26634]: 21:52:41 VENDOR  0x00
+Sep 11 21:52:41 Machine python3[26634]: 21:52:41 VIRTUAL 0x00
+Sep 11 21:52:43 Machine python3[26634]: 21:52:43 VENDOR  0x08
+Sep 11 21:52:43 Machine python3[26634]: 21:52:43 VIRTUAL 0x10  -> fn1
+Sep 11 21:52:44 Machine python3[26634]: 21:52:44 VENDOR  0x00
+Sep 11 21:52:44 Machine python3[26634]: 21:52:44 VIRTUAL 0x00
+Sep 11 21:52:46 Machine python3[26634]: 21:52:46 VENDOR  0x10
+Sep 11 21:52:46 Machine python3[26634]: 21:52:46 VIRTUAL 0x20  -> fn2
+Sep 11 21:52:48 Machine python3[26634]: 21:52:48 VENDOR  0x00
+Sep 11 21:52:48 Machine python3[26634]: 21:52:48 VIRTUAL 0x00
+Sep 11 21:52:49 Machine python3[26634]: 21:52:49 VENDOR  0x20
+Sep 11 21:52:49 Machine python3[26634]: 21:52:49 VIRTUAL 0x80  -> paddle-right
+Sep 11 21:52:50 Machine python3[26634]: 21:52:50 VENDOR  0x00
+Sep 11 21:52:50 Machine python3[26634]: 21:52:50 VIRTUAL 0x00
+Sep 11 22:00:11 Machine systemd[1711]: Stopping [systemd-run] /usr/bin/python3 -u /tmp/pos-capture.py 1200...
+Sep 11 22:00:11 Machine systemd[1711]: Stopped [systemd-run] /usr/bin/python3 -u /tmp/pos-capture.py 1200.
+Sep 11 22:00:11 Machine systemd[1711]: apex4-padlog.service: Consumed 7.518s CPU time, 6.6M memory peak.
+Sep 11 22:00:12 Machine systemd[1711]: Started [systemd-run] /usr/bin/python3 -u /tmp/pos-capture.py 1200.
+Sep 11 22:00:12 Machine python3[27373]: vendor  /dev/hidraw11
+Sep 11 22:00:12 Machine python3[27373]: virtual /dev/hidraw14
+Sep 11 22:00:12 Machine python3[27373]: READY -- press when told
+Sep 11 22:00:12 Machine python3[27373]: 22:00:12 VENDOR  0x00
+Sep 11 22:00:12 Machine python3[27373]: 22:00:12 VIRTUAL 0x00
+Sep 11 22:00:44 Machine python3[27373]: 22:00:44 VENDOR  0x04
+Sep 11 22:00:44 Machine python3[27373]: 22:00:44 VIRTUAL 0x40  -> paddle-left
+Sep 11 22:00:46 Machine python3[27373]: 22:00:46 VENDOR  0x00
+Sep 11 22:00:46 Machine python3[27373]: 22:00:46 VIRTUAL 0x00
+Sep 11 22:00:47 Machine python3[27373]: 22:00:47 VENDOR  0x08
+Sep 11 22:00:47 Machine python3[27373]: 22:00:47 VIRTUAL 0x80  -> paddle-right
+Sep 11 22:00:48 Machine python3[27373]: 22:00:48 VENDOR  0x00
+Sep 11 22:00:48 Machine python3[27373]: 22:00:48 VIRTUAL 0x00
+Sep 11 22:00:49 Machine python3[27373]: 22:00:49 VENDOR  0x10
+Sep 11 22:00:49 Machine python3[27373]: 22:00:49 VIRTUAL 0x10  -> fn1
+Sep 11 22:00:50 Machine python3[27373]: 22:00:50 VENDOR  0x00
+Sep 11 22:00:50 Machine python3[27373]: 22:00:50 VIRTUAL 0x00
+Sep 11 22:00:51 Machine python3[27373]: 22:00:51 VENDOR  0x20
+Sep 11 22:00:51 Machine python3[27373]: 22:00:51 VIRTUAL 0x20  -> fn2
+Sep 11 22:00:52 Machine python3[27373]: 22:00:52 VENDOR  0x00
+Sep 11 22:00:52 Machine python3[27373]: 22:00:52 VIRTUAL 0x00
+Sep 11 22:01:49 Machine python3[27373]: 22:01:49 VENDOR  0x08
+Sep 11 22:01:49 Machine python3[27373]: 22:01:49 VIRTUAL 0x80  -> paddle-right
+Sep 11 22:01:49 Machine python3[27373]: 22:01:49 VENDOR  0x00
+Sep 11 22:01:49 Machine python3[27373]: 22:01:49 VIRTUAL 0x00
+Sep 11 22:01:49 Machine python3[27373]: 22:01:49 VENDOR  0x08
+Sep 11 22:01:49 Machine python3[27373]: 22:01:49 VIRTUAL 0x80  -> paddle-right
+Sep 11 22:01:49 Machine python3[27373]: 22:01:49 VENDOR  0x00
+Sep 11 22:01:49 Machine python3[27373]: 22:01:49 VIRTUAL 0x00
+Sep 11 22:01:50 Machine python3[27373]: 22:01:50 VENDOR  0x08
+Sep 11 22:01:50 Machine python3[27373]: 22:01:50 VIRTUAL 0x80  -> paddle-right
+Sep 11 22:01:50 Machine python3[27373]: 22:01:50 VENDOR  0x00
+Sep 11 22:01:50 Machine python3[27373]: 22:01:50 VIRTUAL 0x00
+Sep 11 22:01:50 Machine python3[27373]: 22:01:50 VENDOR  0x08
+Sep 11 22:01:50 Machine python3[27373]: 22:01:50 VIRTUAL 0x80  -> paddle-right
+Sep 11 22:01:50 Machine python3[27373]: 22:01:50 VENDOR  0x00
+Sep 11 22:01:50 Machine python3[27373]: 22:01:50 VIRTUAL 0x00
+Sep 11 22:01:50 Machine python3[27373]: 22:01:50 VENDOR  0x08
+Sep 11 22:01:50 Machine python3[27373]: 22:01:50 VIRTUAL 0x80  -> paddle-right
+Sep 11 22:01:51 Machine python3[27373]: 22:01:51 VENDOR  0x00
+Sep 11 22:01:51 Machine python3[27373]: 22:01:51 VIRTUAL 0x00
+Sep 11 22:01:51 Machine python3[27373]: 22:01:51 VENDOR  0x04
+Sep 11 22:01:51 Machine python3[27373]: 22:01:51 VIRTUAL 0x40  -> paddle-left
+Sep 11 22:01:51 Machine python3[27373]: 22:01:51 VENDOR  0x00
+Sep 11 22:01:51 Machine python3[27373]: 22:01:51 VIRTUAL 0x00
+Sep 11 22:01:52 Machine python3[27373]: 22:01:52 VENDOR  0x04
+Sep 11 22:01:52 Machine python3[27373]: 22:01:52 VIRTUAL 0x40  -> paddle-left
+Sep 11 22:01:52 Machine python3[27373]: 22:01:52 VENDOR  0x00
+Sep 11 22:01:52 Machine python3[27373]: 22:01:52 VIRTUAL 0x00
+Sep 11 22:01:52 Machine python3[27373]: 22:01:52 VENDOR  0x08
+Sep 11 22:01:52 Machine python3[27373]: 22:01:52 VIRTUAL 0x80  -> paddle-right
+Sep 11 22:01:52 Machine python3[27373]: 22:01:52 VENDOR  0x00
+Sep 11 22:01:52 Machine python3[27373]: 22:01:52 VIRTUAL 0x00
+Sep 11 22:01:53 Machine python3[27373]: 22:01:53 VENDOR  0x04
+Sep 11 22:01:53 Machine python3[27373]: 22:01:53 VIRTUAL 0x40  -> paddle-left
+Sep 11 22:01:53 Machine python3[27373]: 22:01:53 VENDOR  0x00
+Sep 11 22:01:53 Machine python3[27373]: 22:01:53 VIRTUAL 0x00
+Sep 11 22:01:53 Machine python3[27373]: 22:01:53 VENDOR  0x08
+Sep 11 22:01:53 Machine python3[27373]: 22:01:53 VIRTUAL 0x80  -> paddle-right
+Sep 11 22:01:53 Machine python3[27373]: 22:01:53 VENDOR  0x00
+Sep 11 22:01:53 Machine python3[27373]: 22:01:53 VIRTUAL 0x00
+Sep 11 22:01:53 Machine python3[27373]: 22:01:53 VENDOR  0x08
+Sep 11 22:01:53 Machine python3[27373]: 22:01:53 VIRTUAL 0x80  -> paddle-right
+Sep 11 22:01:54 Machine python3[27373]: 22:01:54 VENDOR  0x00
+Sep 11 22:01:54 Machine python3[27373]: 22:01:54 VIRTUAL 0x00
+Sep 11 22:01:54 Machine python3[27373]: 22:01:54 VENDOR  0x08
+Sep 11 22:01:54 Machine python3[27373]: 22:01:54 VIRTUAL 0x80  -> paddle-right
+Sep 11 22:01:54 Machine python3[27373]: 22:01:54 VENDOR  0x00
+Sep 11 22:01:54 Machine python3[27373]: 22:01:54 VIRTUAL 0x00
+Sep 11 22:01:54 Machine python3[27373]: 22:01:54 VENDOR  0x08
+Sep 11 22:01:54 Machine python3[27373]: 22:01:54 VIRTUAL 0x80  -> paddle-right
+Sep 11 22:01:54 Machine python3[27373]: 22:01:54 VENDOR  0x00
+Sep 11 22:01:54 Machine python3[27373]: 22:01:54 VIRTUAL 0x00
+Sep 11 22:01:55 Machine python3[27373]: 22:01:55 VENDOR  0x08
+Sep 11 22:01:55 Machine python3[27373]: 22:01:55 VIRTUAL 0x80  -> paddle-right
+Sep 11 22:01:55 Machine python3[27373]: 22:01:55 VENDOR  0x00
+Sep 11 22:01:55 Machine python3[27373]: 22:01:55 VIRTUAL 0x00
+Sep 11 22:01:55 Machine python3[27373]: 22:01:55 VENDOR  0x08
+Sep 11 22:01:55 Machine python3[27373]: 22:01:55 VIRTUAL 0x80  -> paddle-right
+Sep 11 22:01:55 Machine python3[27373]: 22:01:55 VENDOR  0x00
+Sep 11 22:01:55 Machine python3[27373]: 22:01:55 VIRTUAL 0x00
+Sep 11 22:01:55 Machine python3[27373]: 22:01:55 VENDOR  0x08
+Sep 11 22:01:55 Machine python3[27373]: 22:01:55 VIRTUAL 0x80  -> paddle-right
+Sep 11 22:01:55 Machine python3[27373]: 22:01:55 VENDOR  0x00
+Sep 11 22:01:55 Machine python3[27373]: 22:01:55 VIRTUAL 0x00
+Sep 11 22:01:56 Machine python3[27373]: 22:01:56 VENDOR  0x08
+Sep 11 22:01:56 Machine python3[27373]: 22:01:56 VIRTUAL 0x80  -> paddle-right
+Sep 11 22:01:56 Machine python3[27373]: 22:01:56 VENDOR  0x00
+Sep 11 22:01:56 Machine python3[27373]: 22:01:56 VIRTUAL 0x00
+Sep 11 22:01:56 Machine python3[27373]: 22:01:56 VENDOR  0x08
+Sep 11 22:01:56 Machine python3[27373]: 22:01:56 VIRTUAL 0x80  -> paddle-right
+Sep 11 22:01:56 Machine python3[27373]: 22:01:56 VENDOR  0x00
+Sep 11 22:01:56 Machine python3[27373]: 22:01:56 VIRTUAL 0x00
+Sep 11 22:01:57 Machine python3[27373]: 22:01:57 VENDOR  0x04
+Sep 11 22:01:57 Machine python3[27373]: 22:01:57 VIRTUAL 0x40  -> paddle-left
+Sep 11 22:01:57 Machine python3[27373]: 22:01:57 VENDOR  0x00
+Sep 11 22:01:57 Machine python3[27373]: 22:01:57 VIRTUAL 0x00
+Sep 11 22:01:57 Machine python3[27373]: 22:01:57 VENDOR  0x20
+Sep 11 22:01:57 Machine python3[27373]: 22:01:57 VIRTUAL 0x20  -> fn2
+Sep 11 22:01:58 Machine python3[27373]: 22:01:58 VENDOR  0x00
+Sep 11 22:01:58 Machine python3[27373]: 22:01:58 VIRTUAL 0x00
+Sep 11 22:01:58 Machine python3[27373]: 22:01:58 VENDOR  0x20
+Sep 11 22:01:58 Machine python3[27373]: 22:01:58 VIRTUAL 0x20  -> fn2
+Sep 11 22:01:58 Machine python3[27373]: 22:01:58 VENDOR  0x00
+Sep 11 22:01:58 Machine python3[27373]: 22:01:58 VIRTUAL 0x00
+Sep 11 22:01:58 Machine python3[27373]: 22:01:58 VENDOR  0x20
+Sep 11 22:01:58 Machine python3[27373]: 22:01:58 VIRTUAL 0x20  -> fn2
+Sep 11 22:01:58 Machine python3[27373]: 22:01:58 VENDOR  0x00
+Sep 11 22:01:58 Machine python3[27373]: 22:01:58 VIRTUAL 0x00
+Sep 11 22:01:59 Machine python3[27373]: 22:01:59 VENDOR  0x20
+Sep 11 22:01:59 Machine python3[27373]: 22:01:59 VIRTUAL 0x20  -> fn2
+Sep 11 22:01:59 Machine python3[27373]: 22:01:59 VENDOR  0x00
+Sep 11 22:01:59 Machine python3[27373]: 22:01:59 VIRTUAL 0x00
+Sep 11 22:02:00 Machine python3[27373]: 22:02:00 VENDOR  0x20
+Sep 11 22:02:00 Machine python3[27373]: 22:02:00 VIRTUAL 0x20  -> fn2
+Sep 11 22:02:00 Machine python3[27373]: 22:02:00 VENDOR  0x00
+Sep 11 22:02:00 Machine python3[27373]: 22:02:00 VIRTUAL 0x00
+Sep 11 22:02:00 Machine python3[27373]: 22:02:00 VENDOR  0x20
+Sep 11 22:02:00 Machine python3[27373]: 22:02:00 VIRTUAL 0x20  -> fn2
+Sep 11 22:02:01 Machine python3[27373]: 22:02:01 VENDOR  0x00
+Sep 11 22:02:01 Machine python3[27373]: 22:02:01 VIRTUAL 0x00
+Sep 11 22:02:01 Machine python3[27373]: 22:02:01 VENDOR  0x20
+Sep 11 22:02:01 Machine python3[27373]: 22:02:01 VIRTUAL 0x20  -> fn2
+Sep 11 22:02:01 Machine python3[27373]: 22:02:01 VENDOR  0x00
+Sep 11 22:02:01 Machine python3[27373]: 22:02:01 VIRTUAL 0x00
+Sep 11 22:02:02 Machine python3[27373]: 22:02:02 VENDOR  0x10
+Sep 11 22:02:02 Machine python3[27373]: 22:02:02 VIRTUAL 0x10  -> fn1
+Sep 11 22:02:02 Machine python3[27373]: 22:02:02 VENDOR  0x00
+Sep 11 22:02:02 Machine python3[27373]: 22:02:02 VIRTUAL 0x00
+Sep 11 22:02:02 Machine python3[27373]: 22:02:02 VENDOR  0x10
+Sep 11 22:02:02 Machine python3[27373]: 22:02:02 VIRTUAL 0x10  -> fn1
+Sep 11 22:02:02 Machine python3[27373]: 22:02:02 VENDOR  0x00
+Sep 11 22:02:02 Machine python3[27373]: 22:02:02 VIRTUAL 0x00
+Sep 11 22:02:02 Machine python3[27373]: 22:02:02 VENDOR  0x10
+Sep 11 22:02:02 Machine python3[27373]: 22:02:02 VIRTUAL 0x10  -> fn1
+Sep 11 22:02:03 Machine python3[27373]: 22:02:03 VENDOR  0x00
+Sep 11 22:02:03 Machine python3[27373]: 22:02:03 VIRTUAL 0x00
+Sep 11 22:02:03 Machine python3[27373]: 22:02:03 VENDOR  0x10
+Sep 11 22:02:03 Machine python3[27373]: 22:02:03 VIRTUAL 0x10  -> fn1
+Sep 11 22:02:03 Machine python3[27373]: 22:02:03 VENDOR  0x00
+Sep 11 22:02:03 Machine python3[27373]: 22:02:03 VIRTUAL 0x00
+Sep 11 22:02:03 Machine python3[27373]: 22:02:03 VENDOR  0x10
+Sep 11 22:02:03 Machine python3[27373]: 22:02:03 VIRTUAL 0x10  -> fn1
+Sep 11 22:02:03 Machine python3[27373]: 22:02:03 VENDOR  0x00
+Sep 11 22:02:03 Machine python3[27373]: 22:02:03 VIRTUAL 0x00
+Sep 11 22:02:04 Machine python3[27373]: 22:02:04 VENDOR  0x20
+Sep 11 22:02:04 Machine python3[27373]: 22:02:04 VIRTUAL 0x20  -> fn2
+Sep 11 22:02:04 Machine python3[27373]: 22:02:04 VENDOR  0x00
+Sep 11 22:02:04 Machine python3[27373]: 22:02:04 VIRTUAL 0x00
+Sep 11 22:02:05 Machine python3[27373]: 22:02:05 VENDOR  0x20
+Sep 11 22:02:05 Machine python3[27373]: 22:02:05 VIRTUAL 0x20  -> fn2
+Sep 11 22:02:05 Machine python3[27373]: 22:02:05 VENDOR  0x00
+Sep 11 22:02:05 Machine python3[27373]: 22:02:05 VIRTUAL 0x00
+Sep 11 22:02:06 Machine python3[27373]: 22:02:06 VENDOR  0x08
+Sep 11 22:02:06 Machine python3[27373]: 22:02:06 VIRTUAL 0x80  -> paddle-right
+Sep 11 22:02:06 Machine python3[27373]: 22:02:06 VENDOR  0x00
+Sep 11 22:02:06 Machine python3[27373]: 22:02:06 VIRTUAL 0x00
+Sep 11 22:02:06 Machine python3[27373]: 22:02:06 VENDOR  0x20
+Sep 11 22:02:06 Machine python3[27373]: 22:02:06 VIRTUAL 0x20  -> fn2
+Sep 11 22:02:06 Machine python3[27373]: 22:02:06 VENDOR  0x00
+Sep 11 22:02:06 Machine python3[27373]: 22:02:06 VIRTUAL 0x00
+Sep 11 22:02:07 Machine python3[27373]: 22:02:07 VENDOR  0x08
+Sep 11 22:02:07 Machine python3[27373]: 22:02:07 VIRTUAL 0x80  -> paddle-right
+Sep 11 22:02:07 Machine python3[27373]: 22:02:07 VENDOR  0x00
+Sep 11 22:02:07 Machine python3[27373]: 22:02:07 VIRTUAL 0x00
+Sep 11 22:02:07 Machine python3[27373]: 22:02:07 VENDOR  0x04
+Sep 11 22:02:07 Machine python3[27373]: 22:02:07 VIRTUAL 0x40  -> paddle-left
+Sep 11 22:02:07 Machine python3[27373]: 22:02:07 VENDOR  0x00
+Sep 11 22:02:07 Machine python3[27373]: 22:02:07 VIRTUAL 0x00
+Sep 11 22:02:08 Machine python3[27373]: 22:02:08 VENDOR  0x10
+Sep 11 22:02:08 Machine python3[27373]: 22:02:08 VIRTUAL 0x10  -> fn1
+Sep 11 22:02:08 Machine python3[27373]: 22:02:08 VENDOR  0x00
+Sep 11 22:02:08 Machine python3[27373]: 22:02:08 VIRTUAL 0x00
+Sep 11 22:02:08 Machine python3[27373]: 22:02:08 VENDOR  0x04
+Sep 11 22:02:08 Machine python3[27373]: 22:02:08 VIRTUAL 0x40  -> paddle-left
+Sep 11 22:02:08 Machine python3[27373]: 22:02:08 VENDOR  0x00
+Sep 11 22:02:08 Machine python3[27373]: 22:02:08 VIRTUAL 0x00
+Sep 11 22:02:08 Machine python3[27373]: 22:02:08 VENDOR  0x10
+Sep 11 22:02:08 Machine python3[27373]: 22:02:08 VIRTUAL 0x10  -> fn1
+Sep 11 22:02:09 Machine python3[27373]: 22:02:09 VENDOR  0x00
+Sep 11 22:02:09 Machine python3[27373]: 22:02:09 VIRTUAL 0x00
+Sep 11 22:02:09 Machine python3[27373]: 22:02:09 VENDOR  0x04
+Sep 11 22:02:09 Machine python3[27373]: 22:02:09 VIRTUAL 0x40  -> paddle-left
+Sep 11 22:02:09 Machine python3[27373]: 22:02:09 VENDOR  0x00
+Sep 11 22:02:09 Machine python3[27373]: 22:02:09 VIRTUAL 0x00
+Sep 11 22:02:09 Machine python3[27373]: 22:02:09 VENDOR  0x10
+Sep 11 22:02:09 Machine python3[27373]: 22:02:09 VIRTUAL 0x10  -> fn1
+Sep 11 22:02:09 Machine python3[27373]: 22:02:09 VENDOR  0x00
+Sep 11 22:02:09 Machine python3[27373]: 22:02:09 VIRTUAL 0x00
+Sep 11 22:02:09 Machine python3[27373]: 22:02:09 VENDOR  0x04
+Sep 11 22:02:09 Machine python3[27373]: 22:02:09 VIRTUAL 0x40  -> paddle-left
+Sep 11 22:02:10 Machine python3[27373]: 22:02:10 VENDOR  0x00
+Sep 11 22:02:10 Machine python3[27373]: 22:02:10 VIRTUAL 0x00
+Sep 11 22:02:10 Machine python3[27373]: 22:02:10 VENDOR  0x10
+Sep 11 22:02:10 Machine python3[27373]: 22:02:10 VIRTUAL 0x10  -> fn1
+Sep 11 22:02:10 Machine python3[27373]: 22:02:10 VENDOR  0x00
+Sep 11 22:02:10 Machine python3[27373]: 22:02:10 VIRTUAL 0x00
+Sep 11 22:02:15 Machine python3[27373]: 22:02:15 VENDOR  0x20
+Sep 11 22:02:15 Machine python3[27373]: 22:02:15 VIRTUAL 0x20  -> fn2
+Sep 11 22:02:15 Machine python3[27373]: 22:02:15 VENDOR  0x28
+Sep 11 22:02:15 Machine python3[27373]: 22:02:15 VIRTUAL 0xa0  -> ?
+Sep 11 22:02:15 Machine python3[27373]: 22:02:15 VENDOR  0x2c
+Sep 11 22:02:15 Machine python3[27373]: 22:02:15 VIRTUAL 0xe0  -> ?
+Sep 11 22:02:15 Machine python3[27373]: 22:02:15 VENDOR  0x3c
+Sep 11 22:02:15 Machine python3[27373]: 22:02:15 VIRTUAL 0xf0  -> ?
+Sep 11 22:02:16 Machine python3[27373]: 22:02:16 VENDOR  0x34
+Sep 11 22:02:16 Machine python3[27373]: 22:02:16 VIRTUAL 0x70  -> ?
+Sep 11 22:02:16 Machine python3[27373]: 22:02:16 VENDOR  0x24
+Sep 11 22:02:16 Machine python3[27373]: 22:02:16 VENDOR  0x04
+Sep 11 22:02:16 Machine python3[27373]: 22:02:16 VIRTUAL 0x40  -> paddle-left
+Sep 11 22:02:16 Machine python3[27373]: 22:02:16 VENDOR  0x00
+Sep 11 22:02:16 Machine python3[27373]: 22:02:16 VIRTUAL 0x00
+Sep 11 22:02:16 Machine python3[27373]: 22:02:16 VENDOR  0x04
+Sep 11 22:02:16 Machine python3[27373]: 22:02:16 VIRTUAL 0x40  -> paddle-left
+Sep 11 22:02:16 Machine python3[27373]: 22:02:16 VENDOR  0x14
+Sep 11 22:02:16 Machine python3[27373]: 22:02:16 VIRTUAL 0x50  -> ?
+Sep 11 22:02:16 Machine python3[27373]: 22:02:16 VENDOR  0x04
+Sep 11 22:02:16 Machine python3[27373]: 22:02:16 VIRTUAL 0x40  -> paddle-left
+Sep 11 22:02:16 Machine python3[27373]: 22:02:16 VENDOR  0x00
+Sep 11 22:02:16 Machine python3[27373]: 22:02:16 VIRTUAL 0x00
+Sep 11 22:02:16 Machine python3[27373]: 22:02:16 VENDOR  0x04
+Sep 11 22:02:16 Machine python3[27373]: 22:02:16 VIRTUAL 0x40  -> paddle-left
+Sep 11 22:02:16 Machine python3[27373]: 22:02:16 VENDOR  0x14
+Sep 11 22:02:16 Machine python3[27373]: 22:02:16 VIRTUAL 0x50  -> ?
+Sep 11 22:02:16 Machine python3[27373]: 22:02:16 VENDOR  0x04
+Sep 11 22:02:16 Machine python3[27373]: 22:02:16 VIRTUAL 0x40  -> paddle-left
+Sep 11 22:02:16 Machine python3[27373]: 22:02:16 VENDOR  0x00
+Sep 11 22:02:16 Machine python3[27373]: 22:02:16 VIRTUAL 0x00
+Sep 11 22:02:16 Machine python3[27373]: 22:02:16 VENDOR  0x04
+Sep 11 22:02:16 Machine python3[27373]: 22:02:16 VIRTUAL 0x40  -> paddle-left
+Sep 11 22:02:16 Machine python3[27373]: 22:02:16 VENDOR  0x14
+Sep 11 22:02:16 Machine python3[27373]: 22:02:16 VIRTUAL 0x50  -> ?
+Sep 11 22:02:17 Machine python3[27373]: 22:02:17 VENDOR  0x04
+Sep 11 22:02:17 Machine python3[27373]: 22:02:17 VIRTUAL 0x40  -> paddle-left
+Sep 11 22:02:17 Machine python3[27373]: 22:02:17 VENDOR  0x00
+Sep 11 22:02:17 Machine python3[27373]: 22:02:17 VIRTUAL 0x00
+Sep 11 22:02:17 Machine python3[27373]: 22:02:17 VENDOR  0x20
+Sep 11 22:02:17 Machine python3[27373]: 22:02:17 VIRTUAL 0x20  -> fn2
+Sep 11 22:02:17 Machine python3[27373]: 22:02:17 VENDOR  0x28
+Sep 11 22:02:17 Machine python3[27373]: 22:02:17 VIRTUAL 0xa0  -> ?
+Sep 11 22:02:17 Machine python3[27373]: 22:02:17 VENDOR  0x20
+Sep 11 22:02:17 Machine python3[27373]: 22:02:17 VIRTUAL 0x20  -> fn2
+Sep 11 22:02:17 Machine python3[27373]: 22:02:17 VENDOR  0x00
+Sep 11 22:02:17 Machine python3[27373]: 22:02:17 VIRTUAL 0x00
+Sep 11 22:02:17 Machine python3[27373]: 22:02:17 VENDOR  0x20
+Sep 11 22:02:17 Machine python3[27373]: 22:02:17 VIRTUAL 0x20  -> fn2
+Sep 11 22:02:18 Machine python3[27373]: 22:02:18 VENDOR  0x00
+Sep 11 22:02:18 Machine python3[27373]: 22:02:18 VIRTUAL 0x00
+Sep 11 22:02:18 Machine python3[27373]: 22:02:18 VENDOR  0x20
+Sep 11 22:02:18 Machine python3[27373]: 22:02:18 VIRTUAL 0x20  -> fn2
+Sep 11 22:02:18 Machine python3[27373]: 22:02:18 VENDOR  0x00
+Sep 11 22:02:18 Machine python3[27373]: 22:02:18 VIRTUAL 0x00
+Sep 11 22:02:18 Machine python3[27373]: 22:02:18 VENDOR  0x20
+Sep 11 22:02:18 Machine python3[27373]: 22:02:18 VIRTUAL 0x20  -> fn2
+Sep 11 22:02:18 Machine python3[27373]: 22:02:18 VENDOR  0x00
+Sep 11 22:02:18 Machine python3[27373]: 22:02:18 VIRTUAL 0x00
+Sep 11 22:02:18 Machine python3[27373]: 22:02:18 VENDOR  0x20
+Sep 11 22:02:18 Machine python3[27373]: 22:02:18 VIRTUAL 0x20  -> fn2
+Sep 11 22:02:18 Machine python3[27373]: 22:02:18 VENDOR  0x00
+Sep 11 22:02:18 Machine python3[27373]: 22:02:18 VIRTUAL 0x00
+Sep 11 22:02:20 Machine python3[27373]: 22:02:20 VENDOR  0x08
+Sep 11 22:02:20 Machine python3[27373]: 22:02:20 VIRTUAL 0x80  -> paddle-right
+Sep 11 22:02:20 Machine python3[27373]: 22:02:20 VENDOR  0x00
+Sep 11 22:02:20 Machine python3[27373]: 22:02:20 VIRTUAL 0x00
+Sep 11 22:02:20 Machine python3[27373]: 22:02:20 VENDOR  0x20
+Sep 11 22:02:20 Machine python3[27373]: 22:02:20 VIRTUAL 0x20  -> fn2
+Sep 11 22:02:20 Machine python3[27373]: 22:02:20 VENDOR  0x00
+Sep 11 22:02:20 Machine python3[27373]: 22:02:20 VIRTUAL 0x00
+Sep 11 22:02:21 Machine python3[27373]: 22:02:21 VENDOR  0x20
+Sep 11 22:02:21 Machine python3[27373]: 22:02:21 VIRTUAL 0x20  -> fn2
+Sep 11 22:02:21 Machine python3[27373]: 22:02:21 VENDOR  0x00
+Sep 11 22:02:21 Machine python3[27373]: 22:02:21 VIRTUAL 0x00
+Sep 11 22:02:21 Machine python3[27373]: 22:02:21 VENDOR  0x08
+Sep 11 22:02:21 Machine python3[27373]: 22:02:21 VIRTUAL 0x80  -> paddle-right
+Sep 11 22:02:21 Machine python3[27373]: 22:02:21 VENDOR  0x00
+Sep 11 22:02:21 Machine python3[27373]: 22:02:21 VIRTUAL 0x00
+Sep 11 22:02:21 Machine python3[27373]: 22:02:21 VENDOR  0x08
+Sep 11 22:02:21 Machine python3[27373]: 22:02:21 VIRTUAL 0x80  -> paddle-right
+Sep 11 22:02:21 Machine python3[27373]: 22:02:21 VENDOR  0x00
+Sep 11 22:02:21 Machine python3[27373]: 22:02:21 VIRTUAL 0x00
+Sep 11 22:02:21 Machine python3[27373]: 22:02:21 VENDOR  0x04
+Sep 11 22:02:21 Machine python3[27373]: 22:02:21 VIRTUAL 0x40  -> paddle-left
+Sep 11 22:02:22 Machine python3[27373]: 22:02:22 VENDOR  0x00
+Sep 11 22:02:22 Machine python3[27373]: 22:02:22 VIRTUAL 0x00
+Sep 11 22:02:22 Machine python3[27373]: 22:02:22 VENDOR  0x08
+Sep 11 22:02:22 Machine python3[27373]: 22:02:22 VIRTUAL 0x80  -> paddle-right
+Sep 11 22:02:22 Machine python3[27373]: 22:02:22 VENDOR  0x00
+Sep 11 22:02:22 Machine python3[27373]: 22:02:22 VIRTUAL 0x00
+Sep 11 22:02:22 Machine python3[27373]: 22:02:22 VENDOR  0x04
+Sep 11 22:02:22 Machine python3[27373]: 22:02:22 VIRTUAL 0x40  -> paddle-left
+Sep 11 22:02:22 Machine python3[27373]: 22:02:22 VENDOR  0x0c
+Sep 11 22:02:22 Machine python3[27373]: 22:02:22 VIRTUAL 0xc0  -> ?
+Sep 11 22:02:22 Machine python3[27373]: 22:02:22 VENDOR  0x08
+Sep 11 22:02:22 Machine python3[27373]: 22:02:22 VIRTUAL 0x80  -> paddle-right
+Sep 11 22:02:22 Machine python3[27373]: 22:02:22 VENDOR  0x00
+Sep 11 22:02:22 Machine python3[27373]: 22:02:22 VIRTUAL 0x00
+Sep 11 22:02:22 Machine python3[27373]: 22:02:22 VENDOR  0x04
+Sep 11 22:02:22 Machine python3[27373]: 22:02:22 VIRTUAL 0x40  -> paddle-left
+Sep 11 22:02:22 Machine python3[27373]: 22:02:22 VENDOR  0x00
+Sep 11 22:02:22 Machine python3[27373]: 22:02:22 VIRTUAL 0x00
+Sep 11 22:02:49 Machine python3[27373]: 22:02:49 VENDOR  0x04
+Sep 11 22:02:49 Machine python3[27373]: 22:02:49 VIRTUAL 0x40  -> paddle-left
+Sep 11 22:02:49 Machine python3[27373]: 22:02:49 VENDOR  0x00
+Sep 11 22:02:49 Machine python3[27373]: 22:02:49 VIRTUAL 0x00
+Sep 11 22:02:49 Machine python3[27373]: 22:02:49 VENDOR  0x04
+Sep 11 22:02:49 Machine python3[27373]: 22:02:49 VIRTUAL 0x40  -> paddle-left
+Sep 11 22:02:50 Machine python3[27373]: 22:02:50 VENDOR  0x00
+Sep 11 22:02:50 Machine python3[27373]: 22:02:50 VIRTUAL 0x00
+Sep 11 22:02:50 Machine python3[27373]: 22:02:50 VENDOR  0x04
+Sep 11 22:02:50 Machine python3[27373]: 22:02:50 VIRTUAL 0x40  -> paddle-left
+Sep 11 22:02:50 Machine python3[27373]: 22:02:50 VENDOR  0x00
+Sep 11 22:02:50 Machine python3[27373]: 22:02:50 VIRTUAL 0x00
+Sep 11 22:02:51 Machine python3[27373]: 22:02:51 VENDOR  0x04
+Sep 11 22:02:51 Machine python3[27373]: 22:02:51 VIRTUAL 0x40  -> paddle-left
+Sep 11 22:02:51 Machine python3[27373]: 22:02:51 VENDOR  0x00
+Sep 11 22:02:51 Machine python3[27373]: 22:02:51 VIRTUAL 0x00
+Sep 11 22:02:51 Machine python3[27373]: 22:02:51 VENDOR  0x04
+Sep 11 22:02:51 Machine python3[27373]: 22:02:51 VIRTUAL 0x40  -> paddle-left
+Sep 11 22:02:51 Machine python3[27373]: 22:02:51 VENDOR  0x00
+Sep 11 22:02:51 Machine python3[27373]: 22:02:51 VIRTUAL 0x00
+Sep 11 22:02:52 Machine python3[27373]: 22:02:52 VENDOR  0x04
+Sep 11 22:02:52 Machine python3[27373]: 22:02:52 VIRTUAL 0x40  -> paddle-left
+Sep 11 22:02:52 Machine python3[27373]: 22:02:52 VENDOR  0x00
+Sep 11 22:02:52 Machine python3[27373]: 22:02:52 VIRTUAL 0x00
+Sep 11 22:02:52 Machine python3[27373]: 22:02:52 VENDOR  0x04
+Sep 11 22:02:52 Machine python3[27373]: 22:02:52 VIRTUAL 0x40  -> paddle-left
+Sep 11 22:02:53 Machine python3[27373]: 22:02:53 VENDOR  0x00
+Sep 11 22:02:53 Machine python3[27373]: 22:02:53 VIRTUAL 0x00
+Sep 11 22:02:54 Machine python3[27373]: 22:02:54 VENDOR  0x04
+Sep 11 22:02:54 Machine python3[27373]: 22:02:54 VIRTUAL 0x40  -> paddle-left
+Sep 11 22:02:56 Machine python3[27373]: 22:02:56 VENDOR  0x00
+Sep 11 22:02:56 Machine python3[27373]: 22:02:56 VIRTUAL 0x00
+Sep 11 22:02:56 Machine python3[27373]: 22:02:56 VENDOR  0x04
+Sep 11 22:02:56 Machine python3[27373]: 22:02:56 VIRTUAL 0x40  -> paddle-left
+Sep 11 22:02:57 Machine python3[27373]: 22:02:57 VENDOR  0x00
+Sep 11 22:02:57 Machine python3[27373]: 22:02:57 VIRTUAL 0x00
+Sep 11 22:02:58 Machine python3[27373]: 22:02:58 VENDOR  0x04
+Sep 11 22:02:58 Machine python3[27373]: 22:02:58 VIRTUAL 0x40  -> paddle-left
+Sep 11 22:02:58 Machine python3[27373]: 22:02:58 VENDOR  0x00
+Sep 11 22:02:58 Machine python3[27373]: 22:02:58 VIRTUAL 0x00
+Sep 11 22:02:58 Machine python3[27373]: 22:02:58 VENDOR  0x04
+Sep 11 22:02:58 Machine python3[27373]: 22:02:58 VIRTUAL 0x40  -> paddle-left
+Sep 11 22:02:59 Machine python3[27373]: 22:02:59 VENDOR  0x00
+Sep 11 22:02:59 Machine python3[27373]: 22:02:59 VIRTUAL 0x00
+Sep 11 22:03:03 Machine python3[27373]: 22:03:03 VENDOR  0x04
+Sep 11 22:03:03 Machine python3[27373]: 22:03:03 VIRTUAL 0x40  -> paddle-left
+Sep 11 22:03:06 Machine python3[27373]: 22:03:06 VENDOR  0x00
+Sep 11 22:03:06 Machine python3[27373]: 22:03:06 VIRTUAL 0x00
+Sep 11 22:03:06 Machine python3[27373]: 22:03:06 VENDOR  0x04
+Sep 11 22:03:06 Machine python3[27373]: 22:03:06 VIRTUAL 0x40  -> paddle-left
+Sep 11 22:03:07 Machine python3[27373]: 22:03:07 VENDOR  0x00
+Sep 11 22:03:07 Machine python3[27373]: 22:03:07 VIRTUAL 0x00
+Sep 11 22:03:07 Machine python3[27373]: 22:03:07 VENDOR  0x04
+Sep 11 22:03:07 Machine python3[27373]: 22:03:07 VIRTUAL 0x40  -> paddle-left
+Sep 11 22:03:07 Machine python3[27373]: 22:03:07 VENDOR  0x00
+Sep 11 22:03:07 Machine python3[27373]: 22:03:07 VIRTUAL 0x00
+Sep 11 22:04:36 Machine python3[27373]: 22:04:36 VENDOR  0x08
+Sep 11 22:04:36 Machine python3[27373]: 22:04:36 VIRTUAL 0x80  -> paddle-right
+Sep 11 22:04:37 Machine python3[27373]: 22:04:37 VENDOR  0x00
+Sep 11 22:04:37 Machine python3[27373]: 22:04:37 VIRTUAL 0x00
+Sep 11 22:04:37 Machine python3[27373]: 22:04:37 VENDOR  0x08
+Sep 11 22:04:37 Machine python3[27373]: 22:04:37 VIRTUAL 0x80  -> paddle-right
+Sep 11 22:04:38 Machine python3[27373]: 22:04:38 VENDOR  0x00
+Sep 11 22:04:38 Machine python3[27373]: 22:04:38 VIRTUAL 0x00
+Sep 11 22:04:38 Machine python3[27373]: 22:04:38 VENDOR  0x08
+Sep 11 22:04:38 Machine python3[27373]: 22:04:38 VIRTUAL 0x80  -> paddle-right
+Sep 11 22:04:38 Machine python3[27373]: 22:04:38 VENDOR  0x00
+Sep 11 22:04:38 Machine python3[27373]: 22:04:38 VIRTUAL 0x00
+Sep 11 22:04:39 Machine python3[27373]: 22:04:39 VENDOR  0x08
+Sep 11 22:04:39 Machine python3[27373]: 22:04:39 VIRTUAL 0x80  -> paddle-right
+Sep 11 22:04:40 Machine python3[27373]: 22:04:40 VENDOR  0x00
+Sep 11 22:04:40 Machine python3[27373]: 22:04:40 VIRTUAL 0x00
+Sep 11 22:04:40 Machine python3[27373]: 22:04:40 VENDOR  0x08
+Sep 11 22:04:40 Machine python3[27373]: 22:04:40 VIRTUAL 0x80  -> paddle-right
+Sep 11 22:04:41 Machine python3[27373]: 22:04:41 VENDOR  0x00
+Sep 11 22:04:41 Machine python3[27373]: 22:04:41 VIRTUAL 0x00
+Sep 11 22:04:41 Machine python3[27373]: 22:04:41 VENDOR  0x08
+Sep 11 22:04:41 Machine python3[27373]: 22:04:41 VIRTUAL 0x80  -> paddle-right
+Sep 11 22:04:42 Machine python3[27373]: 22:04:42 VENDOR  0x00
+Sep 11 22:04:42 Machine python3[27373]: 22:04:42 VIRTUAL 0x00
+Sep 11 22:04:42 Machine python3[27373]: 22:04:42 VENDOR  0x08
+Sep 11 22:04:42 Machine python3[27373]: 22:04:42 VIRTUAL 0x80  -> paddle-right
+Sep 11 22:04:43 Machine python3[27373]: 22:04:43 VENDOR  0x00
+Sep 11 22:04:43 Machine python3[27373]: 22:04:43 VIRTUAL 0x00
+Sep 11 22:04:51 Machine python3[27373]: 22:04:51 VENDOR  0x08
+Sep 11 22:04:51 Machine python3[27373]: 22:04:51 VIRTUAL 0x80  -> paddle-right
+Sep 11 22:04:51 Machine python3[27373]: 22:04:51 VENDOR  0x00
+Sep 11 22:04:51 Machine python3[27373]: 22:04:51 VIRTUAL 0x00
+Sep 11 22:04:51 Machine python3[27373]: 22:04:51 VENDOR  0x08
+Sep 11 22:04:51 Machine python3[27373]: 22:04:51 VIRTUAL 0x80  -> paddle-right
+Sep 11 22:04:52 Machine python3[27373]: 22:04:52 VENDOR  0x00
+Sep 11 22:04:52 Machine python3[27373]: 22:04:52 VIRTUAL 0x00
+Sep 11 22:04:52 Machine python3[27373]: 22:04:52 VENDOR  0x08
+Sep 11 22:04:52 Machine python3[27373]: 22:04:52 VIRTUAL 0x80  -> paddle-right
+Sep 11 22:04:52 Machine python3[27373]: 22:04:52 VENDOR  0x00
+Sep 11 22:04:52 Machine python3[27373]: 22:04:52 VIRTUAL 0x00
+Sep 11 22:05:47 Machine python3[27373]: 22:05:47 VENDOR  0x08
+Sep 11 22:05:47 Machine python3[27373]: 22:05:47 VIRTUAL 0x80  -> paddle-right
+Sep 11 22:05:47 Machine python3[27373]: 22:05:47 VENDOR  0x00
+Sep 11 22:05:47 Machine python3[27373]: 22:05:47 VIRTUAL 0x00
+Sep 11 22:05:47 Machine python3[27373]: 22:05:47 VENDOR  0x08
+Sep 11 22:05:47 Machine python3[27373]: 22:05:47 VIRTUAL 0x80  -> paddle-right
+Sep 11 22:05:47 Machine python3[27373]: 22:05:47 VENDOR  0x00
+Sep 11 22:05:47 Machine python3[27373]: 22:05:47 VIRTUAL 0x00
+Sep 11 22:05:47 Machine python3[27373]: 22:05:47 VENDOR  0x08
+Sep 11 22:05:47 Machine python3[27373]: 22:05:47 VIRTUAL 0x80  -> paddle-right
+Sep 11 22:05:47 Machine python3[27373]: 22:05:47 VENDOR  0x00
+Sep 11 22:05:47 Machine python3[27373]: 22:05:47 VIRTUAL 0x00
+Sep 11 22:08:23 Machine systemd[1711]: Stopping [systemd-run] /usr/bin/python3 -u /tmp/pos-capture.py 1200...
+Sep 11 22:08:23 Machine systemd[1711]: Stopped [systemd-run] /usr/bin/python3 -u /tmp/pos-capture.py 1200.
+Sep 11 22:08:23 Machine systemd[1711]: apex4-padlog.service: Consumed 6.538s CPU time, 6.6M memory peak.
+Sep 11 22:08:24 Machine systemd[1711]: Started [systemd-run] /usr/bin/python3 -u /tmp/pos-capture.py 1200.
+Sep 11 22:08:24 Machine python3[27912]: vendor  /dev/hidraw11
+Sep 11 22:08:24 Machine python3[27912]: virtual /dev/hidraw13
+Sep 11 22:08:24 Machine python3[27912]: READY -- press when told
+Sep 11 22:08:24 Machine python3[27912]: 22:08:24 VENDOR  0x00
+Sep 11 22:08:24 Machine python3[27912]: 22:08:24 VIRTUAL 0x00
+Sep 11 22:09:06 Machine python3[27912]: 22:09:06 VENDOR  0x04
+Sep 11 22:09:06 Machine python3[27912]: 22:09:06 VIRTUAL 0x80  -> paddle-right
+Sep 11 22:09:07 Machine python3[27912]: 22:09:07 VENDOR  0x00
+Sep 11 22:09:07 Machine python3[27912]: 22:09:07 VIRTUAL 0x00
+Sep 11 22:09:09 Machine python3[27912]: 22:09:09 VENDOR  0x08
+Sep 11 22:09:09 Machine python3[27912]: 22:09:09 VIRTUAL 0x40  -> paddle-left
+Sep 11 22:09:10 Machine python3[27912]: 22:09:10 VENDOR  0x00
+Sep 11 22:09:10 Machine python3[27912]: 22:09:10 VIRTUAL 0x00
+Sep 11 22:09:11 Machine python3[27912]: 22:09:11 VENDOR  0x10
+Sep 11 22:09:11 Machine python3[27912]: 22:09:11 VIRTUAL 0x20  -> fn2
+Sep 11 22:09:12 Machine python3[27912]: 22:09:12 VENDOR  0x00
+Sep 11 22:09:12 Machine python3[27912]: 22:09:12 VIRTUAL 0x00
+Sep 11 22:09:13 Machine python3[27912]: 22:09:13 VENDOR  0x20
+Sep 11 22:09:13 Machine python3[27912]: 22:09:13 VIRTUAL 0x10  -> fn1
+Sep 11 22:09:13 Machine python3[27912]: 22:09:13 VENDOR  0x00
+Sep 11 22:09:13 Machine python3[27912]: 22:09:13 VIRTUAL 0x00
+Sep 11 22:09:14 Machine python3[27912]: 22:09:14 VENDOR  0x04
+Sep 11 22:09:14 Machine python3[27912]: 22:09:14 VIRTUAL 0x80  -> paddle-right
+Sep 11 22:09:17 Machine python3[27912]: 22:09:17 VENDOR  0x00
+Sep 11 22:09:17 Machine python3[27912]: 22:09:17 VIRTUAL 0x00
+Sep 11 22:09:18 Machine python3[27912]: 22:09:18 VENDOR  0x08
+Sep 11 22:09:18 Machine python3[27912]: 22:09:18 VIRTUAL 0x40  -> paddle-left
+Sep 11 22:09:19 Machine python3[27912]: 22:09:19 VENDOR  0x00
+Sep 11 22:09:19 Machine python3[27912]: 22:09:19 VIRTUAL 0x00
+Sep 11 22:09:20 Machine python3[27912]: 22:09:20 VENDOR  0x10
+Sep 11 22:09:20 Machine python3[27912]: 22:09:20 VIRTUAL 0x20  -> fn2
+Sep 11 22:09:21 Machine python3[27912]: 22:09:21 VENDOR  0x00
+Sep 11 22:09:21 Machine python3[27912]: 22:09:21 VIRTUAL 0x00
+Sep 11 22:09:21 Machine python3[27912]: 22:09:21 VENDOR  0x20
+Sep 11 22:09:21 Machine python3[27912]: 22:09:21 VIRTUAL 0x10  -> fn1
+Sep 11 22:09:22 Machine python3[27912]: 22:09:22 VENDOR  0x00
+Sep 11 22:09:22 Machine python3[27912]: 22:09:22 VIRTUAL 0x00
+Sep 11 22:09:58 Machine python3[27912]: 22:09:58 VENDOR  0x08
+Sep 11 22:09:58 Machine python3[27912]: 22:09:58 VIRTUAL 0x40  -> paddle-left
+Sep 11 22:09:58 Machine python3[27912]: 22:09:58 VENDOR  0x00
+Sep 11 22:09:58 Machine python3[27912]: 22:09:58 VIRTUAL 0x00
+Sep 11 22:09:59 Machine python3[27912]: 22:09:59 VENDOR  0x08
+Sep 11 22:09:59 Machine python3[27912]: 22:09:59 VIRTUAL 0x40  -> paddle-left
+Sep 11 22:09:59 Machine python3[27912]: 22:09:59 VENDOR  0x00
+Sep 11 22:09:59 Machine python3[27912]: 22:09:59 VIRTUAL 0x00
+Sep 11 22:09:59 Machine python3[27912]: 22:09:59 VENDOR  0x08
+Sep 11 22:09:59 Machine python3[27912]: 22:09:59 VIRTUAL 0x40  -> paddle-left
+Sep 11 22:09:59 Machine python3[27912]: 22:09:59 VENDOR  0x00
+Sep 11 22:09:59 Machine python3[27912]: 22:09:59 VIRTUAL 0x00
+Sep 11 22:10:00 Machine python3[27912]: 22:10:00 VENDOR  0x04
+Sep 11 22:10:00 Machine python3[27912]: 22:10:00 VIRTUAL 0x80  -> paddle-right
+Sep 11 22:10:00 Machine python3[27912]: 22:10:00 VENDOR  0x00
+Sep 11 22:10:00 Machine python3[27912]: 22:10:00 VIRTUAL 0x00
+Sep 11 22:10:00 Machine python3[27912]: 22:10:00 VENDOR  0x04
+Sep 11 22:10:00 Machine python3[27912]: 22:10:00 VIRTUAL 0x80  -> paddle-right
+Sep 11 22:10:01 Machine python3[27912]: 22:10:01 VENDOR  0x00
+Sep 11 22:10:01 Machine python3[27912]: 22:10:01 VIRTUAL 0x00
+Sep 11 22:10:01 Machine python3[27912]: 22:10:01 VENDOR  0x20
+Sep 11 22:10:01 Machine python3[27912]: 22:10:01 VIRTUAL 0x10  -> fn1
+Sep 11 22:10:01 Machine python3[27912]: 22:10:01 VENDOR  0x00
+Sep 11 22:10:01 Machine python3[27912]: 22:10:01 VIRTUAL 0x00
+Sep 11 22:10:01 Machine python3[27912]: 22:10:01 VENDOR  0x20
+Sep 11 22:10:01 Machine python3[27912]: 22:10:01 VIRTUAL 0x10  -> fn1
+Sep 11 22:10:01 Machine python3[27912]: 22:10:01 VENDOR  0x00
+Sep 11 22:10:01 Machine python3[27912]: 22:10:01 VIRTUAL 0x00
+Sep 11 22:10:01 Machine python3[27912]: 22:10:01 VENDOR  0x10
+Sep 11 22:10:01 Machine python3[27912]: 22:10:01 VIRTUAL 0x20  -> fn2
+Sep 11 22:10:02 Machine python3[27912]: 22:10:02 VENDOR  0x00
+Sep 11 22:10:02 Machine python3[27912]: 22:10:02 VIRTUAL 0x00
+Sep 11 22:10:02 Machine python3[27912]: 22:10:02 VENDOR  0x10
+Sep 11 22:10:02 Machine python3[27912]: 22:10:02 VIRTUAL 0x20  -> fn2
+Sep 11 22:10:02 Machine python3[27912]: 22:10:02 VENDOR  0x00
+Sep 11 22:10:02 Machine python3[27912]: 22:10:02 VIRTUAL 0x00
+Sep 11 22:10:02 Machine python3[27912]: 22:10:02 VENDOR  0x10
+Sep 11 22:10:02 Machine python3[27912]: 22:10:02 VIRTUAL 0x20  -> fn2
+Sep 11 22:10:02 Machine python3[27912]: 22:10:02 VENDOR  0x00
+Sep 11 22:10:02 Machine python3[27912]: 22:10:02 VIRTUAL 0x00
+Sep 11 22:10:06 Machine python3[27912]: 22:10:06 VENDOR  0x08
+Sep 11 22:10:06 Machine python3[27912]: 22:10:06 VIRTUAL 0x40  -> paddle-left
+Sep 11 22:10:06 Machine python3[27912]: 22:10:06 VENDOR  0x00
+Sep 11 22:10:06 Machine python3[27912]: 22:10:06 VIRTUAL 0x00
+Sep 11 22:10:06 Machine python3[27912]: 22:10:06 VENDOR  0x08
+Sep 11 22:10:06 Machine python3[27912]: 22:10:06 VIRTUAL 0x40  -> paddle-left
+Sep 11 22:10:06 Machine python3[27912]: 22:10:06 VENDOR  0x00
+Sep 11 22:10:06 Machine python3[27912]: 22:10:06 VIRTUAL 0x00
+Sep 11 22:10:09 Machine python3[27912]: 22:10:09 VENDOR  0x04
+Sep 11 22:10:09 Machine python3[27912]: 22:10:09 VIRTUAL 0x80  -> paddle-right
+Sep 11 22:10:10 Machine python3[27912]: 22:10:10 VENDOR  0x00
+Sep 11 22:10:10 Machine python3[27912]: 22:10:10 VIRTUAL 0x00
+Sep 11 22:10:10 Machine python3[27912]: 22:10:10 VENDOR  0x04
+Sep 11 22:10:10 Machine python3[27912]: 22:10:10 VIRTUAL 0x80  -> paddle-right
+Sep 11 22:10:10 Machine python3[27912]: 22:10:10 VENDOR  0x00
+Sep 11 22:10:10 Machine python3[27912]: 22:10:10 VIRTUAL 0x00
+Sep 11 22:10:10 Machine python3[27912]: 22:10:10 VENDOR  0x04
+Sep 11 22:10:10 Machine python3[27912]: 22:10:10 VIRTUAL 0x80  -> paddle-right
+Sep 11 22:10:10 Machine python3[27912]: 22:10:10 VENDOR  0x00
+Sep 11 22:10:10 Machine python3[27912]: 22:10:10 VIRTUAL 0x00
+Sep 11 22:10:12 Machine python3[27912]: 22:10:12 VENDOR  0x20
+Sep 11 22:10:12 Machine python3[27912]: 22:10:12 VIRTUAL 0x10  -> fn1
+Sep 11 22:10:13 Machine python3[27912]: 22:10:13 VENDOR  0x00
+Sep 11 22:10:13 Machine python3[27912]: 22:10:13 VIRTUAL 0x00
+Sep 11 22:10:13 Machine python3[27912]: 22:10:13 VENDOR  0x20
+Sep 11 22:10:13 Machine python3[27912]: 22:10:13 VIRTUAL 0x10  -> fn1
+Sep 11 22:10:13 Machine python3[27912]: 22:10:13 VENDOR  0x00
+Sep 11 22:10:13 Machine python3[27912]: 22:10:13 VIRTUAL 0x00
+Sep 11 22:10:13 Machine python3[27912]: 22:10:13 VENDOR  0x20
+Sep 11 22:10:13 Machine python3[27912]: 22:10:13 VIRTUAL 0x10  -> fn1
+Sep 11 22:10:13 Machine python3[27912]: 22:10:13 VENDOR  0x00
+Sep 11 22:10:13 Machine python3[27912]: 22:10:13 VIRTUAL 0x00
+Sep 11 22:10:13 Machine python3[27912]: 22:10:13 VENDOR  0x10
+Sep 11 22:10:13 Machine python3[27912]: 22:10:13 VIRTUAL 0x20  -> fn2
+Sep 11 22:10:14 Machine python3[27912]: 22:10:14 VENDOR  0x00
+Sep 11 22:10:14 Machine python3[27912]: 22:10:14 VIRTUAL 0x00
+Sep 11 22:10:14 Machine python3[27912]: 22:10:14 VENDOR  0x10
+Sep 11 22:10:14 Machine python3[27912]: 22:10:14 VIRTUAL 0x20  -> fn2
+Sep 11 22:10:14 Machine python3[27912]: 22:10:14 VENDOR  0x00
+Sep 11 22:10:14 Machine python3[27912]: 22:10:14 VIRTUAL 0x00
+Sep 11 22:10:14 Machine python3[27912]: 22:10:14 VENDOR  0x10
+Sep 11 22:10:14 Machine python3[27912]: 22:10:14 VIRTUAL 0x20  -> fn2
+Sep 11 22:10:14 Machine python3[27912]: 22:10:14 VENDOR  0x00
+Sep 11 22:10:14 Machine python3[27912]: 22:10:14 VIRTUAL 0x00
+Sep 11 22:10:14 Machine python3[27912]: 22:10:14 VENDOR  0x10
+Sep 11 22:10:14 Machine python3[27912]: 22:10:14 VIRTUAL 0x20  -> fn2
+Sep 11 22:10:14 Machine python3[27912]: 22:10:14 VENDOR  0x00
+Sep 11 22:10:14 Machine python3[27912]: 22:10:14 VIRTUAL 0x00
+Sep 11 22:11:44 Machine systemd[1711]: Stopping [systemd-run] /usr/bin/python3 -u /tmp/pos-capture.py 1200...
+Sep 11 22:11:44 Machine systemd[1711]: Stopped [systemd-run] /usr/bin/python3 -u /tmp/pos-capture.py 1200.

@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Version=1.0
+Name=APEX 4 临时开关（开/关）
+Comment=立刻启动或停止 Flydigi APEX 4 中继，不改动开机自启设置
+Exec=%PREFIX%/apex4-relay
+Icon=input-gaming
+Terminal=true
+Categories=Utility;
+Keywords=gamepad;controller;flydigi;apex4;

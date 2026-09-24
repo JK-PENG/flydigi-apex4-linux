@@ -1,0 +1,55 @@
+Sanitized excerpts; Windows line endings normalized. Not a complete Wine log.
+Date: 2026-09-13
+Proton: 1788504981 proton-11.0-2c-x86_64
+Runtime: Steam Linux Runtime 4
+Context: independent diagnostic prefix, AppID=0; user confirmed output tests
+Relay: --trigger-dry-run --trigger-debug --hid-debug throughout
+Target: 054c:0df2, usage 0001/0005, output=48, PAIRING_TEMPLATE_MATCH=1
+Only synthetic right-side mild/Off reports were sent. No hardware-effect claim.
+
+15:39:33..15:39:34, HidD_SetOutputReport:
+EFFECT right type=0x01
+CALL HidD_SetOutputReport report=0x02 len=48
+RESULT HidD_SetOutputReport ok=1 winerror=0
+EFFECT right type=0x05
+CALL HidD_SetOutputReport report=0x02 len=48
+RESULT HidD_SetOutputReport ok=1 winerror=0
+WRITE_TEST applied=1 off=1 (API success requires matching relay log)
+
+HID t=21300.260321 OUTPUT rtype=1 len=48 data=02 04 00 00 00 00 00 00 00 00 00 01 3c 28 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+DS5 R2: resistance type=0x01 start=60 strength=40
+DRY-RUN APEX4 R2: mode=1 params=(60, 40, 0, 0, 0) packet=05 a0 01 01 02 01 3c 28 00 00 00 00 00 00 00
+HID t=21301.260712 OUTPUT rtype=1 len=48 data=02 04 00 00 00 00 00 00 00 00 00 05 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+DS5 R2: normal type=0x05
+DRY-RUN APEX4 R2: mode=0 params=(0, 0, 0, 0, 0) packet=05 a0 01 01 02 00 00 00 00 00 00 00 00 00 00
+
+15:43:12, WriteFile diagnostic rerun (binary SHA256):
+7b6431e34bb2c8032fd898d701ee09df2f597c97ab03ab7c383643c9833b1c66
+EFFECT right type=0x01
+CALL WriteFile report=0x02 len=48
+WRITEFILE_NATIVE api_ok=1 winerror=0 reported=47 requested=48
+RESULT WriteFile ok=0 winerror=29
+EFFECT right type=0x05
+CALL WriteFile report=0x02 len=48
+WRITEFILE_NATIVE api_ok=1 winerror=0 reported=47 requested=48
+RESULT WriteFile ok=0 winerror=29
+EFFECT right type=0x05
+CALL HidD_SetOutputReport report=0x02 len=48
+RESULT HidD_SetOutputReport ok=1 winerror=0
+WRITE_TEST applied=0 off=1 (API success requires matching relay log)
+
+HID t=21519.610148 OUTPUT rtype=1 len=48 data=02 04 00 00 00 00 00 00 00 00 00 01 3c 28 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+DS5 R2: resistance type=0x01 start=60 strength=40
+DRY-RUN APEX4 R2: mode=1 params=(60, 40, 0, 0, 0) packet=05 a0 01 01 02 01 3c 28 00 00 00 00 00 00 00
+HID t=21519.610329 OUTPUT rtype=1 len=48 data=02 04 00 00 00 00 00 00 00 00 00 05 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+
+Interpretation: WriteFile returned TRUE and native error 0. The probe generated
+error 29 itself because it required reported==requested. Wine hidclass subtracts
+the report ID from the completion byte count for WRITE_REPORT. Both 48-byte
+packets were delivered intact and translated. The probe subsequently accepts
+exact length or nonzero-report-ID length minus one, while logging the raw count.
+Other short writes remain failures. The revised count classifier passed local
+tests and cross-compilation; the classifier binary itself was not rerun here.
+
+Both Windows APIs arrived as UHID_OUTPUT in this Proton build. Do not infer
+that HidD_SetOutputReport must produce a UHID_SET_REPORT event.

@@ -13,15 +13,30 @@ import json
 import os
 
 APP = "flydigi-apex4"
+TRIGGER_PROFILES = ("disabled", "ow2-safe", "generic-safe")
 DEFAULTS = {
     # Which controller to present: "dualsense" or "dualsense-edge". The Edge has
     # four extra buttons of its own, so paddles can map to real buttons there
     # instead of being folded into touchpad halves and stick clicks.
     "emulate": "dualsense-edge",
-    # What the four back paddles do, in physical order left to right.
+    # What the four back paddles do, indexed by the pad's own M1..M4 labels.
     # Any pad: tp-left, tp-right, l3, r3, none
     # Edge only: paddle-left, paddle-right, fn1, fn2
-    "paddles": ["paddle-left", "fn1", "fn2", "paddle-right"],
+    #
+    # The labels are NOT in left-to-right order, which this list used to assume.
+    # On an APEX 4 the four sit, in the player's left-to-right order, as
+    # M2 (outer, left grip), M4, [power switch], M3, M1 (outer, right grip) --
+    # so M1+M2 are the two grip buttons and M3+M4 the two beside the switch.
+    # The pad's own markings show M1 M3 [switch] M4 M2, because they are read
+    # with the pad turned over, and turning it over swaps left and right; the
+    # player-facing order above is the reverse of that. Measured one button at
+    # a time on a retail pad and checked against Steam's front-facing test page
+    # (a "back view" reading gives a mirrored result); see docs/VALIDATION.md.
+    # This list therefore lands each button on the Edge input in the same place.
+    "paddles": ["paddle-right", "paddle-left", "fn2", "fn1"],
+    # Vendor report bits for M1..M4. Older measured pads use 3,5,4,2; at least
+    # one newer firmware/profile reports the labelled buttons as 2,3,4,5.
+    "paddle_bits": [3, 5, 4, 2],
     # Pad axes -> DualSense axes. A leading minus inverts that axis.
     "gyro_map": "pitch,yaw,roll",
     "accel_map": "-x,z,y",
@@ -34,6 +49,14 @@ DEFAULTS = {
     "drop_after_s": 30,
     # Log every output report from the game, and every rumble level sent on.
     "verbose": False,
+    # Physical trigger output is off unless an explicit, hardware-accepted
+    # profile is selected. Older adaptive_triggers booleans are migrated by
+    # load(); new files always use the named profile.
+    "trigger_profile": "disabled",
+    # Optional inactivity watchdog.  Zero preserves real DualSense semantics:
+    # an effect may legitimately be written once and held until UHID_CLOSE or
+    # an explicit Off.  CLOSE/STOP, disconnect and shutdown always clear it.
+    "trigger_reset_timeout_s": 0.0,
 }
 
 
@@ -59,6 +82,22 @@ def load(explicit=None):
         raise SystemExit("%s: %s" % (target, exc))
     if not isinstance(stored, dict):
         raise SystemExit("%s: expected an object at the top level" % target)
+    if "adaptive_triggers" in stored:
+        if "trigger_profile" in stored:
+            raise SystemExit(
+                "%s: cannot combine trigger_profile with adaptive_triggers"
+                % target)
+        if not isinstance(stored["adaptive_triggers"], bool):
+            raise SystemExit(
+                "%s: adaptive_triggers must be a JSON boolean" % target)
+        stored = dict(stored)
+        stored["trigger_profile"] = (
+            "ow2-safe" if stored.pop("adaptive_triggers") else "disabled")
+    if ("trigger_profile" in stored
+            and stored["trigger_profile"] not in TRIGGER_PROFILES):
+        raise SystemExit(
+            "%s: trigger_profile must be one of %s"
+            % (target, ", ".join(TRIGGER_PROFILES)))
     unknown = sorted(set(stored) - set(DEFAULTS))
     if unknown:
         print("%s: ignoring unknown key(s): %s" % (target, ", ".join(unknown)))

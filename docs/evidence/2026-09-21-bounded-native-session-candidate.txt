@@ -1,0 +1,65 @@
+# Three-cycle bounded native session candidate, sanitized excerpt
+
+Date: 2026-09-21
+Scope: local and SteamOS software validation, four-cycle captured-report replay
+and recoverable deployment. No OW2 launch and no physical ForceAdapt effect.
+
+## Candidate contract
+
+`--trigger-bounded-native-session-right` reuses the physically accepted mode
+caps while adding bounded Off rearming:
+
+```text
+side: R2 only
+mode 2: start<=60 pressure<=1 strength<=32 frequency<=21
+mode 1: start<=60 strength<=40
+per-cycle deadline: <=4.0 seconds from the first accepted effect
+session budget: <=3 cycles in <=30.0 seconds
+maximum possible active-output time: <=12.0 seconds
+```
+
+Within one cycle, mode 2 to mode 1 preserves the game change without sliding
+the four-second deadline. Game Off sends R2 Normal and rearms the next cycle.
+If the deadline fires first, both sides receive Normal and the gate waits for a
+later game Off before rearming. The fourth cycle is rejected. L2 and other
+modes remain ignored. Disconnect, disable and profile exit retain the existing
+bilateral reset behavior.
+
+The previous single-cycle CLI keeps its one-cycle/one-second defaults. The new
+fixed wrapper modes are `native-session-dry-run` and
+`native-session-write`; the latter remains disabled and unconfigured.
+
+## Validation
+
+Local: 124/124 tests PASS, including a regression for output arriving exactly
+at the session deadline. That test initially exposed a path which marked the
+gate complete before the reset; the implementation now leaves expiry to issue
+bilateral Normal. Python compilation, shell syntax and diff checks PASS.
+
+SteamOS: 124 tests ran, 123 PASS and the portable C test skipped because no C
+compiler was installed. Four captured Hanzo report cycles were replayed through
+the real virtual DualSense under `native-session-dry-run`. Final non-Normal
+counts were exactly three rattle and three capped resistance effects; the three
+Off reports produced three R2 Normal decisions, the fourth cycle produced no
+non-Normal output, and there were zero write failures. An additional shutdown
+Normal is expected and not counted as a game cycle.
+
+Runtime `ded4178` was installed through the recoverable directory-swap process.
+Final state was daily service active, manual service inactive, one Edge, zero
+ordinary DualSense, one relay and no OW2 process. The persisted launch option
+remains `translation-dry-run`, `native-session-write` is absent, and
+`adaptive_triggers=false`.
+
+## Pending physical authorization
+
+The fastest remaining D-stage check is one holder block of three normally
+released shots. To exercise Off rather than the four-second timeout, each R2
+action should release promptly after the resistance is felt and within four
+seconds of initial trigger feedback. Ordinary game rumble remains independent
+and may briefly reach `(255,255)` after release, as already documented.
+
+This broader authorization is not inherited from the earlier one-cycle test.
+It must explicitly approve R2 only, both capped modes, up to three cycles in 30
+seconds, at most four seconds per cycle and at most twelve seconds total active
+output. Unexpected strength, wrong side, missing Normal or unknown reset stops
+the block immediately.

@@ -1,0 +1,40 @@
+[2026-09-11 22:00:09] Opted-in Controller Mask for AppId [REDACTED]: ffff
+[2026-09-11 22:00:09] Opted-in Controller Mask for AppId [REDACTED]: 100f
+[2026-09-11 22:00:19] Opted-in Controller Mask for AppId [REDACTED]: 100f
+[2026-09-11 22:00:19] Opted-in Controller Mask for AppId [REDACTED]: 100f
+[2026-09-11 22:00:19] Opted-in Controller Mask Forced On
+[2026-09-11 22:00:20] Opted-in Controller Mask for AppId [REDACTED]: 100f
+[2026-09-11 22:00:20] Opted-in Controller Mask for AppId [REDACTED]: 100f
+[2026-09-11 22:00:20] Opted-in Controller Mask for AppId [REDACTED]: 100f
+[2026-09-11 22:00:20] Opted-in Controller Mask for AppId [REDACTED]: 100f
+[2026-09-11 22:01:41] Opted-in Controller Mask for AppId [REDACTED]: 100f
+[2026-09-11 22:01:41] Opted-in Controller Mask for AppId [REDACTED]: 100f
+[2026-09-11 22:01:41] Opted-in Controller Mask for AppId [REDACTED]: 100f
+[2026-09-11 22:01:41] Opted-in Controller Mask for AppId [REDACTED]: 100f
+[2026-09-11 22:01:41] Opted-in Controller Mask for AppId [REDACTED]: 100f
+[2026-09-11 22:01:41] Opted-in Controller Mask for AppId [REDACTED]: 100f
+[2026-09-11 22:01:41] Opted-in Controller Mask for AppId [REDACTED]: 100f
+[2026-09-11 22:01:41] Opted-in Controller Mask for AppId [REDACTED]: 100f
+[2026-09-11 22:01:41] Opted-in Controller Mask for AppId [REDACTED]: 100f
+[2026-09-11 22:08:18] Opted-in Controller Mask for AppId [REDACTED]: 100f
+[2026-09-11 22:08:19]   Product:      DualSense Edge Wireless Controller
+[2026-09-11 22:08:19] Controller using HIDAPI driver, vid=0x054c, pid=0x0df2
+[2026-09-11 22:08:19] Controller using HIDAPI driver, vid=0x054c, pid=0x0df2
+[2026-09-11 22:08:19] Opted-in Controller Mask for AppId [REDACTED]: 100f
+[2026-09-11 22:13:26] Opted-in Controller Mask Forced Off
+[2026-09-11 22:13:26] Opted-in Controller Mask for AppId [REDACTED]: 100f
+[2026-09-11 22:13:26] Opted-in Controller Mask for AppId [REDACTED]: ffff
+[2026-09-11 22:13:26] Opted-in Controller Mask for AppId [REDACTED]: 100f
+[2026-09-11 22:13:26] Opted-in Controller Mask for AppId [REDACTED]: ffff
+[2026-09-11 22:20:22] Opted-in Controller Mask for AppId [REDACTED]: 100f
+[2026-09-11 22:20:24]   Product:      DualSense Edge Wireless Controller
+[2026-09-11 22:20:24] Controller using HIDAPI driver, vid=0x054c, pid=0x0df2
+[2026-09-11 22:20:24] Controller using HIDAPI driver, vid=0x054c, pid=0x0df2
+[2026-09-11 22:20:24] Opted-in Controller Mask for AppId [REDACTED]: 100f
+[2026-09-11 22:20:24] Opted-in Controller Mask Forced Off
+[2026-09-11 22:27:58] Opted-in Controller Mask for AppId [REDACTED]: 100f
+[2026-09-11 22:29:02]   Product:      DualSense Edge Wireless Controller
+[2026-09-11 22:29:02] Controller using HIDAPI driver, vid=0x054c, pid=0x0df2
+[2026-09-11 22:29:02] Controller using HIDAPI driver, vid=0x054c, pid=0x0df2
+[2026-09-11 22:29:02] Opted-in Controller Mask for AppId [REDACTED]: 100f
+[2026-09-11 22:29:02] Opted-in Controller Mask Forced Off

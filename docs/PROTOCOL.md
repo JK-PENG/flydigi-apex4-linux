@@ -52,24 +52,35 @@ Measured with the dongle unplugged, pad in DInput mode over USB-C:
 One trap: freshly plugged in, the pad answers commands **before** it starts
 streaming. A self-test with a two-second window called a perfectly healthy pad
 "no input reports at all"; the stream was running a moment later. Give it several
-seconds, and poke it with a command first.
+seconds, and issue only the documented read-only `0xEC` identity request first.
 
-## The IMU streams unconditionally
+## Observed IMU stream behavior
 
 This is the finding that matters most, because the opposite was believed:
 [SDL issue #10161](https://github.com/libsdl-org/SDL/issues/10161) was closed on
 the understanding that an Apex 4 only reports sensors while its gyro-mouse mode
 is enabled, and that there is no way to tell whether that mode is on.
 
-Measured: with the mouse interface completely silent (gyro-mouse off), the vendor
-stream carries all six axes at 1000 Hz, with no enable command of any kind, on the
-dongle. Over 30 s at rest the gyro reads **exactly zero** in 27926 consecutive
-frames — no bias, no dither.
+On the original development pad, with the mouse interface completely silent
+(gyro-mouse off), the vendor stream carries all six axes at 1000 Hz with no
+enable command. Over 30 s at rest its gyro read **exactly zero** in 27926
+consecutive frames — no bias or dither.
 
-One unexplained observation, recorded because it matters for any driver: early in
-the session the same stream sat completely static for several minutes, then began
-reporting and has done so reliably since. A driver should not assume the stream
-cannot stop.
+That behavior is not universal enough to call unconditional. On a second APEX 4,
+DeviceType 84 with firmware/profile `6837`, a 62191-frame motion capture had no
+changing byte anywhere in the 32-byte report. The official controller calibration
+restored a plausible static gravity vector (`4,1,802`), proving the same field
+layout, but a further 61691 frames remained static through rotation, tilt, and
+flip, with all gyro axes at zero. Earlier in development the original pad also
+sat static for several minutes before it began updating. A consumer must detect
+live accel **and** gyro changes rather than infer working motion from report rate
+or one plausible gravity sample.
+
+Follow-up: that `6837` capture turned out to be a pad-state gate, not a dead
+stream. It was taken with the pad's gyro-mouse toggle off, and switching the
+toggle back on makes the vendor fields update and the virtual IMU work. The
+detection advice stands -- require live accel **and** gyro changes -- but a
+silent stream means "check the toggle on the pad" before suspecting the relay.
 
 ## Input report layout (`report id 0x04`, 32 bytes)
 
@@ -77,7 +88,7 @@ cannot stop.
 |---|---|
 | 0 | report id `0x04` |
 | 4–5 | gyro yaw, 12-bit copy (byte 4 low, low nibble of byte 5 high) |
-| 7 | paddle flags: bits **3, 5, 4, 2** are M1..M4 **left to right** (mask `0x3C`) |
+| 7 | paddle flags, mask `0x3C`; the M1..M4 bit order varies by firmware/profile |
 | 8 | bit 3 = Home key |
 | 9, 10 | button flags; byte 10 bit 4 = L2 pressed, bit 5 = R2, bit 6 = L3, bit 7 = R3 |
 | 11:12, 13:14, 15:16 | accelerometer X, Y, Z — int16 LE |
@@ -88,14 +99,30 @@ cannot stop.
 | 26:27 | gyro pitch (rotation about the accel X axis) |
 | 29:30 | gyro roll (rotation about the accel Y axis) |
 
-Two traps in there. The **paddle bit order is not the button order** — pressing
-M1..M4 left to right lights bits 3, 5, 4, 2. And the **Home key is not a gamepad
-button at all**: the pad reports it through the descriptor's Consumer page, so it
-arrives on evdev as `KEY_RED` (0x18E) and `BTN_MODE` stays empty forever.
+Three traps in there. The **paddle labels are not laid out left to right**: on a
+retail APEX 4 the player-facing order is M2 (outer, left grip), M4, [power
+switch], M3, M1 (outer, right grip), while the pad's own markings read
+`M1 M3 [switch] M4 M2` because they are read with the pad turned over. Anything
+that maps the four as a simple left-to-right run -- including a capture that
+records them from a back view -- comes out mirrored.
 
-For reference, the same four paddles reach evdev as `BTN_TRIGGER_HAPPY1`,
-`BTN_TRIGGER_HAPPY3`, `BTN_TRIGGER_HAPPY2` and `BTN_DEAD` — another reason to read
-them from the vendor report instead.
+The **paddle bit order is also not stable across observed firmware/profiles**:
+the original pad reported labelled M1..M4 as bits 3, 5, 4, 2, while a
+SteamOS-tested firmware `6837` reported 2, 3, 4, 5. The relay keeps the old order
+as its compatibility default and exposes `paddle_bits`/`--paddle-bits`; measure
+the labelled buttons with `tools/relay-path-watch.py` instead of guessing, and
+keep the label layout in `paddles` and the raw bits in `paddle_bits` -- they are
+different questions. The **Home key is not a gamepad button at all**: the pad
+reports it through the descriptor's Consumer page, so it arrives on evdev as
+`KEY_RED` (0x18E) and `BTN_MODE` stays empty forever.
+
+For reference, on the original pad the same four paddles reached evdev as
+`BTN_TRIGGER_HAPPY1`, `BTN_TRIGGER_HAPPY3`, `BTN_TRIGGER_HAPPY2` and `BTN_DEAD`.
+On the `6837` validation profile, raw vendor bits 2, 3, 4, 5 were measured
+directly, and one button at a time in 2026-09-11 established that
+`paddle_bits=2,3,4,5` was right while the `paddles` order was wrong. The virtual
+Edge raw report is the acceptance source because some kernels do not publish its
+four extensions on an evdev node.
 
 ## Bluetooth is a different pad, and a dead end for sensors
 
@@ -128,7 +155,8 @@ a constant `0xa5` — the old dialect's own framing magic — and byte 20 a cons
 
 ## Command channel
 
-Out: 12 bytes, `[0x05, cmd, args...]`, written to interface 2.
+Ordinary old-protocol commands are 12 bytes, `[0x05, cmd, args...]`, written to
+interface 2. The confirmed ForceAdapt effect report is 15 bytes.
 
 Replies do **not** come back as a report of their own. They arrive inside the same
 `0x04` input stream, identified by the **command echo in byte 15**. Anything that
@@ -140,7 +168,20 @@ separate reply report will wait forever.
 | 236 (`0xEC`) | device info — reply below |
 | 17 (`0x11`) | dongle version — reply has `p[0]=4, p[1]=17`, then two version bytes |
 | 15 (`0x0F`) | rumble: `[0x05, 0x0F, left, right]`, each 0..255 |
+| 160 (`0xA0`) | live ForceAdapt: `[05,A0,01,apply,side,mode,p0..p4,0,0,0,0]` |
 | 235, 234, 231, 229, 51 | config blob transfer (see flydigictl) |
+
+`0xA0` is the APEX 4/K2 DInput ForceAdapt command, physically validated by the
+external ApexSenseBridge project on retail DeviceTypes 84 and 103 over wired and
+2.4 GHz transports. Byte 2 is the effect-family selector `1`; omitting it shifts
+the effect and the firmware ignores the write. Side is 1 left or 2 right. Modes
+0..3 are Normal, resistance, rattle and breakthrough. The frame has no CRC, and
+the relay does not claim a physical ACK from a successful HID write.
+
+The implementation treats this as protocol evidence, not as local hardware
+verification. Its transport still validates this exact VID/PID, descriptor,
+identity reply, DeviceType and connection before enabling `0xA0`; every other
+command is outside its runtime allowlist. See [DSX.md](DSX.md).
 
 Device info reply (`p[15] == 236`), as measured on this pad:
 
@@ -249,13 +290,13 @@ Notes that cost time, for anyone taking the same route:
 
 ## What is not known
 
-* **The adaptive-trigger command family for `k2`.** The pad has ForceAdapt
-  triggers; nothing here drives them. Flydigi's SDK gates them on a device code,
-  and the numbers for `k2` are not in any public source. This is the one large gap.
+* **Linux hardware validation of `0xA0` in this relay.** The framing and external
+  APEX 4 behavior are known and implemented, but still need the bounded local
+  test and a native-game session on both cable and 2.4 GHz.
 * **The roll sign** in a consumer's frame.
 * **Bluetooth modes** — untested; the pad almost certainly speaks something else
   there.
-* **Byte 13** of the device-info reply, and most bits of bytes 9 and 10.
+* Most bits of firmware bytes 9 and 10 beyond their combined version value.
 * **Why the vendor stream was once static** for minutes.
 * Everything about **other old-dialect models**. The framing is shared; the scales
   and offsets are per-model and must be measured. `tools/` is how.

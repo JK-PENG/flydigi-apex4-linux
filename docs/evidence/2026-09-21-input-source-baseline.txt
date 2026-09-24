@@ -1,0 +1,44 @@
+# OW2 input-source baseline, sanitized excerpt
+
+Date: 2026-09-21
+Scope: read-only idle-system and retained Steam-log inspection; no game launch
+
+The host exposed these relevant input identities while the normal Edge relay
+was running:
+
+```text
+054c:0df2  Apex 4 (DualSense Edge)                 gamepad + motion + touchpad
+28de:11ff  Microsoft X-Box 360 pad 0               gamepad
+28de:1304  Valve Software Steam Controller Puck     mouse/keyboard interfaces
+04b4:2412  physical Flydigi interfaces              gamepad/vendor/mouse
+```
+
+OW2's saved Steam setting was ForceOff. Retained controller logs from an actual
+ordinary-DualSense OW2 session showed:
+
+```text
+054c:0ce6 DualSense Wireless Controller, HIDAPI
+Controller 4 mapping uses xinput : false
+Opted-in Controller Mask Forced Off
+OW2 controllers loaded empty.vdf mappings
+```
+
+The logs also referred to two Steam controller indices for the app, but did not
+provide enough identity linkage to prove which input path OW2 consumed. The
+resident `28de:11ff` gamepad is therefore a plausible source of Xbox glyphs or a
+second input path, not proof of either.
+
+Other evidence remains positive: the holder confirmed normal menu control and
+the ordinary DualSense received OW2 native trigger output. No duplicate input,
+wrong button mapping or double action has been reported. The user considers
+Xbox glyphs acceptable if functionality is correct.
+
+The synchronized game dry-run subsequently recorded paired physical Flydigi
+and virtual Sony actions, but no button or trigger event from the resident Xbox
+device. Control remained normal and OW2 emitted Sony trigger output matching
+the holder's actions. See `2026-09-21-ow2-synchronized-capture.txt`.
+
+Conclusion: glyph style is non-blocking UI behavior for the current acceptance
+scope. There is no evidence in this action window for duplicate or mismapped
+Xbox input, so a game-scoped exclusion experiment is not justified. Reopen only
+if a concrete double action, wrong mapping or Xbox-source event is observed.

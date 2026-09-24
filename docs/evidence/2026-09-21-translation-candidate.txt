@@ -1,0 +1,53 @@
+# Native translation comparison candidate, sanitized excerpt
+
+Date: 2026-09-21
+Scope: local and SteamOS software/read-only validation; no game and no physical
+trigger write
+
+## Candidate
+
+The runtime compatibility translator remains unchanged. A comparison-only
+semantic translator maps decoded zones, packed strength and frequency directly
+to the APEX vocabulary. `translation-dry-run` enables full HID debug, changed
+compat/semantic decisions and physical trigger positions. It has no ForceAdapt
+write path.
+
+Two standard-library read-only tools were added:
+
+- `input-source-watch.py` observes physical Flydigi, virtual Sony and resident
+  Valve Xbox evdev changes on one monotonic timeline;
+- `trigger-capture-extract.py` deduplicates raw HID output into complete effect
+  transitions and comparison records suitable for replay fixtures.
+
+Local validation: 109/109 tests, Python compilation, shell syntax and diff
+checks passed.
+
+## SteamOS validation
+
+The first independent-tree smoke attempt failed before creating a stable relay:
+the main script referenced `trigger_translation` without importing the module.
+No game or physical trigger write occurred. A regression test reproduced the
+missing runtime symbol; commit `d98d88c` added the import.
+
+The corrected candidate ran 109 tests on SteamOS: 108 passed and the existing
+portable C test skipped because no C compiler was installed. A harmless
+`translation-dry-run` child then created one ordinary DualSense and restored one
+Edge after exit.
+
+The idle input observer found all three intended sources: physical Flydigi,
+virtual DualSense Edge and Valve `28de:11ff` Xbox 360 gamepad. Steam Input for
+OW2 remained ForceOff. Historical controller logs identify the ordinary
+DualSense as HIDAPI and `mapping uses xinput : false`; they do not link every
+Steam controller index to the game's actual input consumer.
+
+## Deployment
+
+Runtime `d98d88c` was installed with a recoverable previous-runtime backup.
+The OW2 launch option was backed up and changed from `bounded-dry-run` to
+`translation-dry-run`. Steam was restarted and the option persisted once.
+Final state was `adaptive_triggers=False`, daily service active, manual service
+inactive, one Edge, zero ordinary DualSense and no OW2 process.
+
+Next evidence must come from one synchronized game dry-run. It will decide
+whether the resident Xbox path duplicates input and will capture genuine full
+OW2 reports before a live translation profile is selected.

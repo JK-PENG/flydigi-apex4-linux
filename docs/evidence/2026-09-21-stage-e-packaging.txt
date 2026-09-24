@@ -1,0 +1,47 @@
+# Stage E packaging and 2.4 GHz automated regression, sanitized excerpt
+
+Date: 2026-09-21
+Scope: installer TDD, local and SteamOS regression, recoverable runtime
+deployment and read-only 2.4 GHz self-test. No game launch and no physical
+ForceAdapt effect.
+
+## License/notices delivery
+
+The installer previously copied runtime code and control assets but omitted the
+root `LICENSE` and `THIRD_PARTY_NOTICES.md`. A real temporary-prefix installer
+test first failed because both files were absent. The minimal fix adds those
+two files to the existing copy operation. The test executes the installer with
+temporary XDG/HOME paths and stubbed privileged/service commands, then compares
+the installed bytes against the repository originals.
+
+Commit `8e159d7` passed 125 local tests plus Python compilation, shell syntax and
+diff checks. SteamOS ran the same 125 tests: 124 passed and the existing
+portable C test skipped because no compiler was installed.
+
+The runtime was staged with both notice files, compiled, byte-compared and
+installed through the recoverable directory swap. The deployed `LICENSE` and
+`THIRD_PARTY_NOTICES.md` compare exactly with the validated archive copies.
+
+## Automated 2.4 GHz regression
+
+The installed read-only self-test reported:
+
+```text
+uhid                         PASS
+hid_playstation              PASS
+/dev/uhid writable           PASS
+vendor interface             PASS
+identity                     Apex 4, DeviceType 84, battery 4/5, dongle
+sensor stream                gravity 1.02 g, PASS
+```
+
+Final runtime state was daily service active, manual service inactive, one
+relay and no OW2 process. Steam remained `translation-dry-run`, session-write
+was absent, and `adaptive_triggers=false`.
+
+## Remaining boundary
+
+This closes notice delivery and the automated 2.4 GHz device/sensor baseline.
+It does not replace holder regression for Edge paddles/input after return, a
+cable native-mode sample, or any release/push decision. The C-dependent Windows
+portable test remains an explicit SteamOS skip rather than a PASS.

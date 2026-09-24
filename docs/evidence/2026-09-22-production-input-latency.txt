@@ -1,0 +1,130 @@
+# OW2-safe production input-latency regression, sanitized excerpt
+
+Date: 2026-09-22
+Scope: holder-approved production-profile OW2 run over 2.4 GHz, ten observed R2
+cycles, safe launch-option rollback, logging analysis and a deployed quiet-mode
+fix candidate.
+
+## Positive trigger evidence
+
+The instructed first five cycles and five additional holder cycles all produced
+the accepted machine sequence:
+
+```text
+0x26 -> R2 mode 2 (0,1,32,21,0)
+0x21 -> R2 mode 1 (0,40,0,0,0)
+0x05 -> R2 Normal
+```
+
+Machine totals were ten rattle, ten resistance and ten game-Off Normal decisions,
+with zero safety timeout, write failure or wrong-side output. The holder confirmed
+the first five cycles had vibration/resistance and normal release, including the
+fourth and fifth.
+
+## Negative holder evidence
+
+During the additional five actions, the holder observed that around the fourth
+or fifth action Hanzo sometimes did not release the arrow immediately after R2
+was released; the shot occurred roughly one second later. This is a production
+acceptance failure even though trigger effects and game Off were eventually
+logged correctly. The successful first sample does not overwrite it.
+
+The game was exited normally. OW2/wrapper counts returned to zero, daily Edge
+was restored, and the persisted option was immediately changed from
+`ow2-safe-write` back to `translation-dry-run` with a backup. Final safe state
+was one Edge, no ordinary DualSense, no production write option and global
+profile disabled.
+
+## Logging correlation and candidate cause
+
+The production wrapper still forced both `--hid-debug` and `--trigger-debug`.
+Across about 569.4 seconds, the single relay process synchronously emitted:
+
+```text
+full HID log lines:              35,127  (~61.7/second average)
+repeated unsupported L2 lines:  16,987
+```
+
+Those prints share the Python main loop with 250 Hz physical-input forwarding.
+The result is consistent with journald/stdout backpressure causing intermittent
+input delay, but this run did not capture physical and virtual R2 on one timeline,
+so the cause remains a supported hypothesis rather than a proven attribution.
+
+## Fix candidate and remaining gate
+
+Commit `c4f36af` removes `--hid-debug` and `--trigger-debug` from
+`OW2_SAFE_WRITE_ARGS`; `ow2-safe-dry-run` retains both for diagnostics. Successful
+ForceAdapt errors remain visible through the existing unconditional error path,
+while production no longer logs every host output report or repeated unsupported
+L2 Off.
+
+The fix passes 149 local tests and 148 SteamOS tests with one compiler-dependent
+skip, and the public installer upgraded successfully with a 0.96 g self-test.
+It is deployed but not re-enabled: Steam remains `translation-dry-run`.
+
+Production acceptance remains open until a holder-approved quiet-mode run records
+physical Flydigi and virtual Sony trigger release timestamps while repeating at
+least five actions, shows no meaningful input lag or delayed shot, retains all
+trigger/Off safety evidence, exits cleanly and restores the safe Edge state.
+
+## Quiet-mode synchronized retest
+
+The holder authorized a ten-cycle retest. The actual manual service ExecStart
+contained only `--emulate dualsense --trigger-ow2-safe-right`; there were zero
+HID/trigger debug lines and zero ForceAdapt write/timeout failures. An independent
+read-only evdev monitor captured ten physical R2 releases and ten virtual Sony R2
+releases, all paired:
+
+```text
+cycle relay latency (ms)
+1      4.013
+2      1.014
+3      0.060
+4      6.995
+5      3.043
+6      4.086
+7      1.031
+8      4.092
+9      4.108
+10     4.052
+
+min 0.060 ms, max 6.995 ms, average 3.249 ms
+```
+
+The holder reported no delayed shot across all ten cycles, explicitly including
+the previously problematic later actions. The monitor unit exited success/0.
+This closes the relay input-delay regression: removing synchronous production
+debug traffic changed the observed behavior and the physical-to-virtual release
+path remained below 7 ms in every sample.
+
+After normal game exit, OW2/wrapper counts were zero and daily active/manual
+inactive/one Edge/zero ordinary DualSense were restored. Because the retest
+authorization did not include persistence, Steam was backed up and returned to
+`translation-dry-run`; `ow2-safe-write` is currently absent. Production profile
+persistence remains a separate user decision.
+
+## Code-enforced quiet and final review
+
+The first quiet fix removed debug flags from the wrapper. Final review found a
+remaining configuration bypass: persisted `verbose=true` or a documented live
+`--trigger-debug` command could recreate synchronous logging. Commits `a13046f`
+and `cfb81d2` close that path:
+
+- `ow2-safe-write` always passes `--quiet-output`;
+- every live OW2-safe route, including direct named/legacy/config selection,
+  forces verbose off;
+- live OW2-safe rejects verbose, HID-debug and trigger-debug combinations;
+- dry-run retains full trigger/HID diagnostics;
+- write, identity, attach, reset and clear failures remain unconditional.
+
+Final verification: 150/150 local tests PASS; SteamOS 150 tests ran, 149 PASS
+and one portable C test skipped for missing compiler. The public installer
+upgraded successfully with a 0.95 g self-test. Installed runtime reports
+`OW2_SAFE_WRITE_ARGS=('--trigger-ow2-safe-right', '--quiet-output')` and the
+safe post-test state remains translation-dry-run/global profile disabled/one
+Edge.
+
+Independent final code review returned APPROVE with no critical/high/medium
+issue; architecture returned CLEAR with no blocker/watch. The latency defect is
+closed. Persisting `ow2-safe-write` remains an explicit user decision, separate
+from technical acceptance.

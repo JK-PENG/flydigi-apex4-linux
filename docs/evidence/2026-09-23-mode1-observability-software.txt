@@ -1,0 +1,30 @@
+# Mode 1 可观察性：软件诊断候选（脱敏）
+
+日期：2026-09-23。范围仅为本地与 SteamOS 独立目录软件验证；**无新的实体
+ForceAdapt 写入、无游戏启动、无已安装 relay 升级**。先前 L2/R2 mode 1 的
+持握者负样本保留在 `2026-09-23-generic-candidate-steamos.txt`，不被本轮
+单测或 echo 模拟器结果覆盖。
+
+用户批准的诊断设计采用现有 `0xA0` typed writer、同一已验证 fd 的最长
+100 ms 初始回复清理与最长 100 ms 写后读取，后者从原效果时限中扣除；
+不发送新 vendor 命令。`A0_ECHO_OBSERVED` 仅指在该窗口读到匹配 echo，
+仍不能证明固件已应用特定 mode，更不能替代持握者触感。
+
+本地代码提交 `ad43a4e` 经失败测试→实现→回归；补强测试提交
+`2c72125`。最新本地全套为 186 tests / OK；Python 编译和差异空白检查
+通过。使用 HEAD `2c72125` 生成的独立归档 SHA-256 为
+`5ec96d1b813a1e80a80883598592fc5f4d02c548e84bfb81258f2c3da5867344`，
+SteamOS 校验一致，全套 186 tests / OK / 1 compiler-dependent skip，
+Python 编译、shell 语法、无写入固定候选预览通过。未带 `--write` 的
+`--observe-forceadapt-echo` 被 CLI 明确拒绝。
+
+完整物理输入日志的私有 0600 文件采集与筛选写在 `docs/VALIDATION.md`。
+五条合成 R2 事件在 `10..11` 窗口内摘要为
+`events=5 min=0 max=128 full_cycles=1`；错误侧、窗口外都返回状态 2。
+这些只证明筛选方法，不恢复此前被截断的原始输入。
+
+远端原源码 checkout 未修改；已安装日常服务 active、手动服务 inactive、
+默认 `trigger_profile=disabled`。本轮只读枚举时项目虚拟 Edge 数为 0，
+手柄是否在线未获实机确认，因此不把软件 PASS 写成在线 UHID 或实体 PASS。
+下一次实体动作必须重新提供侧别、固定参数、时长、输入动作、自动 Normal、
+预算与停损条件，并取得持握者明确批准。

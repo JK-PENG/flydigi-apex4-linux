@@ -1,0 +1,89 @@
+# Stage E wired and returned-Edge regression, sanitized excerpt
+
+Date: 2026-09-21
+Scope: USB-C/DInput read-only preflight, one explicitly authorized bounded R2
+OW2 cycle, normal exit, safe option restoration, then read-only Edge paddle and
+IMU validation.
+
+## Wired preflight and IMU gate
+
+Initial self-test identified an APEX 4 DeviceType 84 on the wired transport,
+with daily service active, manual service inactive and one relay. The sensor
+check read only 0.12 g, matching the documented pad-side gyro-mouse toggle-off
+state. No game or effect was started. After the holder short-pressed the small
+round/`+` button beside Home, the same self-test passed at 1.00 g:
+
+```text
+uhid                         PASS
+hid_playstation              PASS
+/dev/uhid writable           PASS
+vendor interface             PASS
+identity                     DeviceType 84, battery 4/5, wired
+sensor stream                gravity 1.00 g, PASS
+```
+
+## Wired native R2 sample
+
+After exact authorization, Steam was stopped before the backed-up launch-option
+change. The first launch request did not start OW2 or consume the one-cycle
+budget; the announced fallback did. Before the holder action, only bilateral
+connection Normal had been sent and the non-Normal count was zero.
+
+```text
+23:26:55.897  R2 mode 2 (0,1,32,21,0)
+23:26:56.615  R2 mode 1 (0,40,0,0,0)  (+0.718 s)
+23:26:56.901  L2 Normal, safety deadline
+23:26:56.903  R2 Normal, safety deadline
+```
+
+There was no write failure or wrong-side effect. The holder confirmed both
+vibration and resistance and confirmed normal R2 travel after release. This is
+a bounded cable transport sample; it does not replace the 2.4 GHz three-cycle
+game-Off acceptance.
+
+After normal exit, OW2 and wrapper counts were zero, daily service was active,
+manual service inactive, and one Edge/zero ordinary DualSense/one relay were
+restored. Steam was stopped for an exact backed-up restoration to
+`translation-dry-run`; `native-write` was absent and
+`adaptive_triggers=false` after restart.
+
+## Returned-Edge paddles and IMU
+
+The read-only vendor-to-virtual paddle monitor recorded labelled M1..M4 once
+each:
+
+```text
+vendor  04 08 10 20
+virtual 80 40 20 10
+```
+
+All four transitions and releases appeared on both sides with no loss.
+
+The read-only IMU monitor then captured 10,000 vendor frames while the holder
+moved and tilted the controller without touching controls:
+
+```text
+accel_x    -179..276
+accel_y    -655..285
+accel_z     500..897
+gyro_pitch -293..224
+gyro_yaw   -151..136
+gyro_roll  -777..576
+gyro-mouse X/Y events: 10259
+```
+
+Both accelerometer and gyro halves changed, so this is a vendor IMU PASS rather
+than mouse motion being mistaken for sensor data.
+
+## Acceptance boundary
+
+The E-stage targeted cable sample, returned-Edge paddles and live IMU regression
+pass. Normal OW2 navigation and the holder's in-game action also exercise the
+controller input path. Ordinary cable rumble and L2 mild output retain their
+earlier physical evidence; this run did not repeat isolated motor or L2 writes.
+OW2 still has no observed dynamic L2 report, so OW2 L2 remains N/A rather than
+an inferred game feature.
+
+Final machine state: OW2=0, daily active, manual inactive, one relay, one Edge,
+zero ordinary DualSense, one translation-dry-run option, zero native-write
+options and `adaptive_triggers=false`.

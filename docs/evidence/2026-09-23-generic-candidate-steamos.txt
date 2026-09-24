@@ -1,0 +1,158 @@
+# Generic-safe candidate: SteamOS pre-install validation (sanitized)
+
+Date: 2026-09-23. Scope: no game launch, no non-Normal ForceAdapt write, no
+installed-runtime upgrade. The existing daily Edge service remained active.
+The remote source checkout was dirty and was not modified; archives were
+unpacked in a separate user-owned validation directory.
+
+Local candidate 764890f: 174/174 tests passed locally. The first remote run
+had one failure and one skip: `test_candidate_preview_never_requires_hardware_or_writes`
+returned status 2 because its nominal dry-run attempted a read-only `0xEC`
+identity query while the daily relay was active. A standalone targeted test
+passed, but a repeat of the full suite reproduced the failure. This negative
+sample is not erased by the later fix.
+
+Corrected candidate eb916a4: fixed candidate preview no longer opens a vendor
+node or issues `0xEC`; its new test failed before the code change and passed
+afterward. Archive SHA-256:
+`38cb6079528debf2298388e0fa8c31a2fd09f140e394a5fed72710ad933eb3e9`.
+The remote archive hash matched. SteamOS suite: 175 tests, OK, one compiler-
+dependent skip. Python compilation, shell syntax, identity-only wrapper
+preview and Edge/generic profile calibration preview also passed. These are
+software checks, not real UHID or hardware acceptance.
+
+Pre-install `./install.sh --check` was run twice without `--force`: both times
+UHID, hid-playstation, writable UHID node, vendor interface and DeviceType 84
+identity passed, but gravity was 2.09 g. A further passive, read-only 3 s IMU
+capture recorded 3001 frames, with accel raw `(65,-159,1667)` and gyro raw
+`(-24,12,-89)` unchanged in every frame; no gyro-mouse event arrived. This is
+consistent with a pad-side sensor gate/frozen stream seen earlier, but no
+holder action has yet confirmed the cause. The installer was not run and the
+daily service was not restarted. Next: holder-coordinated, read-only toggle
+and motion check; do not bypass this failure with `--force`.
+
+## Holder-coordinated IMU recovery and one installed upgrade
+
+After an explicit holder-ready reply, the read-only IMU monitor printed READY.
+The holder short-pressed the pad-side gyro toggle and moved/tilted the pad.
+The capture had 37,775 frames: accel X `-328..367`, Y `-378..284`,
+Z `797..1965`; gyro pitch `-319..229`, yaw `-233..130`, roll `-795..533`;
+mouse X/Y motion events 8,745. The holder then confirmed the pad was flat and
+untouched. `./install.sh --check` passed with gravity 1.00 g.
+
+The corrected candidate was installed once through the public installer (no
+`--force`). The previous runtime was retained for rollback. The installed
+`apex4-ds5` hash matched the corrected candidate source
+`a1a22975204c9f49855d15fa945060502d98b96015dd2784a0e6d96fb5f97e31`.
+Daily service active, manual service inactive, exactly one project virtual
+Edge. Existing user config and environment file had byte-identical SHA-256
+values before and after; the installed default stayed `trigger_profile=disabled`.
+No game or Steam launch option was changed.
+
+## Real UHID output, no physical ForceAdapt
+
+A short manual relay with `--trigger-profile generic-safe --trigger-dry-run
+--trigger-debug` was exercised first as Edge and then as plain DualSense.
+For each identity, fixed `l2-zone-rattle-32` produced L2 mode 2
+`(0,1,32,21,0)` and same-side Normal on Off; `r2-zone-resistance-40` produced
+R2 mode 1 `(0,40,0,0,0)` and Normal on Off. Edge ignored the unaccepted
+machine report; plain DualSense ignored the unaccepted mode-3 breakpoint.
+Accepted decisions were prefixed `DRY-RUN`, so there was no physical
+ForceAdapt write. During each temporary session exactly one selected Sony
+identity existed and the other was absent.
+
+After the plain session an immediate identity assertion ran before the kernel
+had rebound the restored Edge and failed once. A bounded retry then observed
+`(Edge,plain)=(1,0)`; final daily/manual states were active/inactive. This
+operator-check timing failure is retained, not silently counted as an initial
+PASS. Steam and user-systemd environments carry the two SDL physical-pad
+filters but no global `PROTON_DISABLE_HIDRAW`; current Proton input-source
+verification is pending.
+
+## First bounded physical sample: holder sensation UNKNOWN
+
+Within the explicitly approved 2.4G six-candidate block, the daily relay was
+stopped and the direct tool verified APEX 4 DeviceType 84, firmware 6837,
+dongle. It issued L2 mode 2 `(0,1,32,21,0)` for at most one second, then
+bilateral Normal; the command exited 0. Daily service and exclusive Edge
+`(1,0)` were restored immediately. The holder reported not pressing L2 during
+that one-second window and therefore feeling nothing. This is machine WRITE/
+reset PASS but holder sensation UNKNOWN, not a tactile FAIL or PASS. The
+approved 34-second aggregate activity budget has spent one second; any
+repeat requires explicit additional authorization before another write.
+
+The holder explicitly approved one extra, same-parameter L2 mode-2 repetition,
+raising the aggregate cap to 35 seconds. After confirming L2 was already held
+at mid-travel, the tool again verified the same dongle identity, wrote L2
+mode 2 for at most one second, and finished with bilateral Normal and one
+restored Edge. The holder reported feeling it and normal travel after release;
+R2 was subsequently reported normal. This closes L2 mode-2 tactile feedback
+for this 2.4G parameter sample, not every game or connection.
+
+The second originally planned short item then wrote L2 mode 1 `(0,40,0,0,0)`
+for at most one second, with successful bilateral Normal and exclusive Edge
+restoration. The holder requested a longer repeat before giving a positive
+tactile verdict, so the one-second L2 resistance sample remains tactile
+UNKNOWN. Three seconds of the now-35-second aggregate cap have been used.
+The existing approved six-item package contains the identical-parameter L2
+mode-1 15-second hold; moving it earlier requires an explicit holder choice.
+
+The holder chose to move that already-approved 15-second L2 mode-1 item
+forward, reporting L2/R2 normal before the action. The direct tool verified
+the same 2.4G identity, printed the L2 mode-1 `(0,40,0,0,0)` packet, held the
+effect for no more than 15 seconds, then reported bilateral Normal. The daily
+service and exclusive Edge `(1,0)` were restored. The holder reported **no
+perceived L2 resistance**. This is a negative holder result: the candidate is
+not physically accepted on L2, although the HID write path returned success.
+The capture did not timestamp physical L2 motion against the effect window, so
+it does not yet distinguish an ineffective start-zero L2 parameter from
+action-timing/consumer effects. Do not promote generic L2 resistance from this
+sample. The original six-item block is paused; no mode-3 or R2 long-hold
+write followed it. Aggregate non-Normal activity so far is at most 18 of the
+explicitly authorized 35 seconds (including one extra L2 mode-2 repeat).
+
+The holder confirmed both trigger travels normal. A separate two-item L2
+diagnostic package was explicitly approved: known mild `(60,40)` for at most
+2 seconds, and only if useful a further `(0,40)` for at most 1 second, each
+with automatic bilateral Normal. The physical-only input watcher was
+extended and validated locally so it can remain open while the virtual relay
+is stopped. During the first, known-mild command window, it captured 43 L2
+ABS events ranging `0..161` between outer monotonic markers `63986.985571`
+and `63989.770962`. The direct tool verified the same dongle and issued L2
+mode 1 `(60,40,0,0,0)` for at most 2 seconds, then bilateral Normal; Edge
+`(1,0)` returned. The holder still felt no L2 resistance, and later reported
+both trigger travels normal. R2 was not pressed in this control.
+
+**Timing correction:** those 43 events are within the entire command window,
+which includes an identity check before the physical effect. The old tool did
+not timestamp the actual write, so exact motion/effect overlap is not proven.
+Do not infer from this sample that `start=0` is or is not the root cause, nor
+repeat the second `(0,40)` item without new information. A new tool test first
+failed, then proved monotonic logging of actual successful write and completed
+Normal reset; remote validation of that instrumented tool is pending. Current
+non-Normal activity is at most 20 seconds across the approved packages.
+
+## R2 standalone resistance: machine PASS, holder negative
+
+The holder confirmed normal travel and approved continuing the originally
+bounded 2.4G R2 mode-1 `(0,40,0,0,0)` hold, at most 15 seconds. A revised
+diagnostic tool, independently unpacked from local commit `499c1e3`, passed
+177 SteamOS tests with one compiler-dependent skip before use. It records
+monotonic time immediately after a successful effect write and after completed
+bilateral Normal. During the real test it verified DeviceType 84, firmware
+6837, dongle; `WRITE accepted t=64356.086582`, `Normal reset complete
+t=64371.089184`. The command exited 0 and exclusive Edge `(1,0)` returned.
+The holder reported no R2 resistance and otherwise normal trigger travel.
+
+The concurrent physical-only input watcher produced more output than the
+bounded capture retained. Although the holder reported repeatedly pressing
+R2, this record cannot prove the exact R2 analogue trajectory inside those
+two timestamps; do not claim machine-synchronized input PASS from it. The
+negative tactile result is nevertheless preserved. Standalone mode 1 has no
+current holder PASS for either side under these direct tests, while prior OW2
+R2 rattle→resistance/game evidence remains a separately scoped positive
+sample. Do not infer that `start=0` alone is responsible, or that mode 1 is
+universally unavailable. The remaining mode-3 and second start-zero L2
+items were not sent. Cumulative non-Normal activity was at most 35 seconds
+across the explicitly approved packages; all subsequent physical writes are
+paused. The installed default remains disabled; no game was launched.

@@ -1,0 +1,57 @@
+{
+  "provenance": "captured",
+  "source": "OW2 practice range, Hanzo, ordinary virtual DualSense, Proton Experimental",
+  "notes": "Sanitized full HID output vectors and monotonic relative transitions; no device identifiers.",
+  "vectors": {
+    "rattle": {
+      "report": "020e40000000000000000026ff0300000000000015000500000000000000000000000000000000000000000000000000",
+      "params": "ff030000000000001500",
+      "compat": [2, [0, 1, 120, 21, 0]],
+      "semantic": [2, [0, 1, 32, 21, 0]]
+    },
+    "resistance": {
+      "report": "020e40000000000000000021ff0392244912000000000500000000000000000000000000000000000000000000000000",
+      "params": "ff039224491200000000",
+      "compat": [1, [1, 64, 0, 0, 0]],
+      "semantic": [1, [0, 96, 0, 0, 0]]
+    },
+    "off": {
+      "report": "020e40000000000000000005000000000000000000000500000000000000000000000000000000000000000000000000",
+      "params": "00000000000000000000",
+      "compat": [0, [0, 0, 0, 0, 0]],
+      "semantic": [0, [0, 0, 0, 0, 0]]
+    }
+  },
+  "actions": [
+    {
+      "rattle_t": 38791.868897,
+      "rattle_r2": 12,
+      "resistance_t": 38792.588592,
+      "resistance_r2": 228,
+      "off_t": 38795.738557,
+      "off_r2": 0
+    },
+    {
+      "rattle_t": 38802.102410,
+      "rattle_r2": 11,
+      "resistance_t": 38802.838472,
+      "resistance_r2": 129,
+      "off_t": 38807.788531,
+      "off_r2": 0
+    },
+    {
+      "rattle_t": 38811.919273,
+      "rattle_r2": 14,
+      "resistance_t": 38812.638360,
+      "resistance_r2": 255,
+      "off_t": 38814.388338,
+      "off_r2": 0
+    }
+  ],
+  "pre_action_transitions": [
+    {"type": "0x26", "physical_r2": 2},
+    {"type": "0x05", "physical_r2": 2},
+    {"type": "0x26", "physical_r2": 2},
+    {"type": "0x05", "physical_r2": 2}
+  ]
+}

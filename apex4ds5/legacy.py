@@ -11,10 +11,10 @@ axes do not share a scale. Both were measured, see GYRO_DEG_PER_LSB.
 
     [0]        report id 0x04
     [4:5]      gyro yaw, 12-bit copy (low byte 4, high nibble of 5)
-    [7]        paddle flags -- bits 3,5,4,2 are M1..M4 left to right (mask 0x3C),
-               confirmed twice by pressing them in order. On evdev the same four
-               arrive as TRIGGER_HAPPY1, TRIGGER_HAPPY3, TRIGGER_HAPPY2 and
-               BTN_DEAD, which is a second reason to read them here instead.
+    [7]        paddle flags -- mask 0x3C. The original pad reports labelled
+               M1..M4 as bits 3,5,4,2; firmware/profile 6837 was measured as
+               2,3,4,5, so this order is configurable. On evdev the mapping is
+               also model/profile dependent, another reason to read it here.
     [8]        bit 3 = the Home key. It is not a gamepad button at all: the pad
                reports it through the descriptor's Consumer page, so it reaches
                evdev as KEY_RED (0x18E) and BTN_MODE stays empty forever.
@@ -33,6 +33,7 @@ PRODUCT_ID = 0x2412
 VENDOR_DESC_PREFIX = bytes((0x06, 0xA0, 0xFF))
 INPUT_REPORT_ID = 0x04
 REPORT_LEN = 32
+DEFAULT_PADDLE_BITS = (3, 5, 4, 2)
 
 # Command channel: 12 bytes out, [5, cmd, args...]. Replies come back inside the
 # 0x04 input stream, discriminated by the command echo in byte 15 -- not by a
@@ -40,6 +41,7 @@ REPORT_LEN = 32
 CMD_REPORT_ID = 0x05
 CMD_GET_DEVICE_INFO = 236
 CMD_HAPTIC = 0x0F           # [5, 0x0F, left, right], each 0..255
+CMD_FORCEADAPT = 0xA0       # confirmed live trigger effect; built in forceadapt.py
 CMD_GET_DONGLE_VERSION = 17
 CMD_ECHO_OFFSET = 15
 DEVICE_TYPE_APEX4 = 84
@@ -92,64 +94,89 @@ def _s16(lo, hi):
     return v - 65536 if v & 0x8000 else v
 
 
-def find_vendor_node():
-    """The hidraw node carrying the vendor collection, or None.
-
-    Matched on the report descriptor prefix as well as the ids: all four of the
-    pad's interfaces share `04b4:2412`, and a command written to the mouse one is
-    accepted silently and does nothing.
-    """
-    import fcntl, glob
-    for path in sorted(glob.glob("/dev/hidraw*")):
-        uevent = "/sys/class/hidraw/%s/device/uevent" % os.path.basename(path)
-        try:
-            text = open(uevent).read()
-        except OSError:
-            continue
-        matched = False
-        for line in text.splitlines():
-            if line.startswith("HID_ID="):
-                # bus:vendor:product, each id zero-padded to eight hex digits,
-                # so a "%04x:%04x" substring never matches.
-                parts = line.split("=", 1)[1].split(":")
+def is_vendor_node(path):
+    """Whether path is exactly the Apex 4 0xFFA0 vendor collection."""
+    import fcntl
+    if not path:
+        return False
+    uevent = "/sys/class/hidraw/%s/device/uevent" % os.path.basename(path)
+    try:
+        text = open(uevent).read()
+    except OSError:
+        return False
+    matched = False
+    for line in text.splitlines():
+        if line.startswith("HID_ID="):
+            parts = line.split("=", 1)[1].split(":")
+            try:
                 matched = (len(parts) == 3
                            and int(parts[1], 16) == VENDOR_ID
                            and int(parts[2], 16) == PRODUCT_ID)
-        if not matched:
-            continue
-        try:
-            fd = os.open(path, os.O_RDONLY | os.O_NONBLOCK)
-        except OSError:
-            continue
-        try:
-            size = struct.unpack("i", fcntl.ioctl(fd, 0x80044801, struct.pack("i", 0)))[0]
-            buf = bytearray(struct.pack("I4096s", size, b""))
-            fcntl.ioctl(fd, 0x90044802, buf, True)
-        except OSError:
-            continue
-        finally:
-            os.close(fd)
-        if bytes(buf[4:4 + len(VENDOR_DESC_PREFIX)]) == VENDOR_DESC_PREFIX:
+            except ValueError:
+                matched = False
+    if not matched:
+        return False
+    try:
+        fd = os.open(path, os.O_RDONLY | os.O_NONBLOCK)
+    except OSError:
+        return False
+    try:
+        size = struct.unpack("i", fcntl.ioctl(
+            fd, 0x80044801, struct.pack("i", 0)))[0]
+        buf = bytearray(struct.pack("I4096s", size, b""))
+        fcntl.ioctl(fd, 0x90044802, buf, True)
+        return bytes(buf[4:4 + len(VENDOR_DESC_PREFIX)]) == VENDOR_DESC_PREFIX
+    except OSError:
+        return False
+    finally:
+        os.close(fd)
+
+
+def find_vendor_node():
+    """The hidraw node carrying the vendor collection, or None."""
+    import glob
+    for path in sorted(glob.glob("/dev/hidraw*")):
+        if is_vendor_node(path):
             return path
     return None
 
 
+def read_device_info_fd(fd, timeout=2.0, resend_interval=0.15):
+    """Ask an open vendor node who it is; only the read-only 0xEC is sent."""
+    import select, time
+    request = device_info_request()
+    end = time.monotonic() + timeout
+    next_request = 0.0
+    while time.monotonic() < end:
+        now = time.monotonic()
+        if now >= next_request:
+            written = os.write(fd, request)
+            if written != len(request):
+                raise OSError("short identity request write (%d/%d)"
+                              % (written, len(request)))
+            next_request = now + resend_interval
+        remaining = max(0.0, min(0.1, end - time.monotonic()))
+        if not select.select([fd], [], [], remaining)[0]:
+            continue
+        data = os.read(fd, 64)
+        if (is_input(data)
+                and data[CMD_ECHO_OFFSET] == CMD_GET_DEVICE_INFO):
+            return parse_device_info(data)
+    return None
+
+
+def device_info_request():
+    """The only request used by the asynchronous identity gate (read-only)."""
+    return bytes([CMD_REPORT_ID, CMD_GET_DEVICE_INFO] + [0] * 10)
+
+
 def read_device_info(node, timeout=2.0):
     """Ask the pad who it is. Returns the parsed dict, or None on silence."""
-    import select, time
     fd = os.open(node, os.O_RDWR | os.O_NONBLOCK)
     try:
-        os.write(fd, bytes([CMD_REPORT_ID, CMD_GET_DEVICE_INFO] + [0] * 10))
-        end = time.time() + timeout
-        while time.time() < end:
-            if not select.select([fd], [], [], 0.1)[0]:
-                continue
-            data = os.read(fd, 64)
-            if is_input(data) and data[CMD_ECHO_OFFSET] == CMD_GET_DEVICE_INFO:
-                return parse_device_info(data)
+        return read_device_info_fd(fd, timeout=timeout)
     finally:
         os.close(fd)
-    return None
 
 
 def haptic_packet(left, right):
@@ -166,7 +193,8 @@ def command_echo(data):
     if not is_input(data):
         return None
     echo = data[CMD_ECHO_OFFSET]
-    return echo if echo in (236, 235, 234, 231, 229, 51, 17) else None
+    return echo if echo in (236, 235, 234, 231, 229, 51, 17,
+                            CMD_FORCEADAPT) else None
 
 
 # Battery is a LEVEL, not a percentage: Flydigi report 0..5 steps, with 6 as
@@ -186,6 +214,9 @@ CONNECTION = {0: "dongle", 1: "wired", 2: "wireless", 3: "bluetooth"}
 
 def parse_device_info(data):
     """Decode a command-236 reply."""
+    if (len(data) != REPORT_LEN or data[0] != INPUT_REPORT_ID
+            or data[CMD_ECHO_OFFSET] != CMD_GET_DEVICE_INFO):
+        raise ValueError("not a valid Apex 4 command-0xEC identity reply")
     level = data[11]
     charging = level == BATTERY_CHARGING
     return {
@@ -207,7 +238,7 @@ class Reading:
 
     __slots__ = ("gyro_deg_s", "accel_g", "l2", "r2", "paddles", "home", "raw")
 
-    def __init__(self, data):
+    def __init__(self, data, paddle_bits=DEFAULT_PADDLE_BITS):
         self.raw = data
         pitch = _s16(data[26], data[27])
         roll = _s16(data[29], data[30])
@@ -223,6 +254,7 @@ class Reading:
         self.l2 = data[23]
         self.r2 = data[24]
         flags = data[7]
-        # Physical order left to right; the bit order is not the button order.
-        self.paddles = tuple(bool(flags & (1 << b)) for b in (3, 5, 4, 2))
+        # Physical order is profile/firmware dependent; the relay validates and
+        # supplies the configured M1..M4 bit order.
+        self.paddles = tuple(bool(flags & (1 << b)) for b in paddle_bits)
         self.home = bool(data[8] & 0x08)
